@@ -32,10 +32,12 @@ import {
   aws_ec2 as ec2,
   aws_sqs as sqs,
   aws_s3_notifications as s3n,
+  IAspect,
+  Aspects,
 } from 'aws-cdk-lib';
 import { Vpc } from 'aws-cdk-lib/aws-ec2';
 import { NagSuppressions } from 'cdk-nag';
-import { Construct } from 'constructs';
+import { Construct, IConstruct } from 'constructs';
 import { APIStack } from './api/api-stack';
 import { AuthStack } from './main/auth-stack';
 
@@ -545,6 +547,12 @@ export class MainStack extends Stack {
       },
     ]);
 
+    if (loggingBucket.policy) {
+      Aspects.of(this).add(
+        new AddS3BucketNotificationsDependency(loggingBucket.policy.node.defaultChild as CfnResource)
+      );
+    }
+
     // init MicroBatch Stack
     microBatchStack = new MicroBatchStack(this, 'MicroBatchStack', {
       solutionId: solutionId,
@@ -655,4 +663,19 @@ export class MainStack extends Stack {
       default: label,
     };
   };
+}
+
+class AddS3BucketNotificationsDependency implements IAspect {
+  public constructor(
+    private deps: CfnResource
+  ) { }
+
+  public visit(node: IConstruct): void {
+    if (
+      node instanceof CfnResource &&
+      node.cfnResourceType === "Custom::S3BucketNotifications"
+    ) {
+      node.addDependency(this.deps);
+    }
+  }
 }
