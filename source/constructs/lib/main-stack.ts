@@ -46,6 +46,8 @@ import { EcsClusterStack } from './main/ecs-cluster-stack';
 import { PortalStack } from './main/portal-stack';
 import { VpcStack } from './main/vpc-stack';
 import { MicroBatchStack } from './microbatch/main/services/amazon-services-stack';
+import * as fs from 'fs';
+import * as path from 'path';
 
 const { VERSION } = process.env;
 
@@ -551,6 +553,25 @@ export class MainStack extends Stack {
       Aspects.of(this).add(
         new AddS3BucketNotificationsDependency(loggingBucket.policy.node.defaultChild as CfnResource)
       );
+    }
+
+    class UseS3BucketNotificationsWithRetryAspects implements IAspect {
+      public constructor() { }
+
+      public visit(node: IConstruct): void {
+        if (
+          node instanceof CfnResource &&
+          node.cfnResourceType === "AWS::Lambda::Function"
+        ) {
+          const code = fs.readFileSync(path.join(__dirname, '../lambda/custom-resource/put_s3_bucket_notification_with_retry.py'), 'utf8');
+          node.addPropertyOverride("Code.ZipFile", code);
+        }
+      }
+    }
+
+    const notificationHandler = Stack.of(this).node.tryFindChild('BucketNotificationsHandler050a0587b7544547bf325f094a3db834');
+    if (notificationHandler) {
+      Aspects.of(notificationHandler).add(new UseS3BucketNotificationsWithRetryAspects())
     }
 
     // init MicroBatch Stack
