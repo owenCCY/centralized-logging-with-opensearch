@@ -1,0 +1,13 @@
+boto3
+moto
+docker
+pytest
+pyyaml
+Jinja2
+pytest-cov
+pytest-mock
+requests-mock
+moto[awslambda]
+requests_aws4auth
+urllib3
+pydantic==1.10.6 --no-binary=pydantic

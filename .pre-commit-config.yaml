@@ -1,0 +1,46 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: https://github.com/awslabs/git-secrets
+    rev: 99d01d58ebcc06e237c0e3f3ff5ae628aeef6aa6
+    hooks:
+      - id: git-secrets
+        entry: /usr/bin/env
+        args:
+          # Using a bash script to ensure aws secrets rules is always installed.
+          - bash
+          - -c
+          - echo "Using aws secrets rules" && git-secrets --register-aws && git-secrets --pre_commit_hook $@
+
+  - repo: https://github.com/dontirun/text-prepender
+    rev: v0.1.0
+    hooks:
+      - id: text-prepender
+        name: "License header check"
+        files: \.(py)$
+        exclude: __init__.py
+        args:
+          - --text-file
+          - COPYRIGHT.txt
+        stages:
+          - commit
+
+  - repo: https://github.com/pycqa/flake8
+    rev: "6.0.0"
+    hooks:
+      - id: flake8
+        stages:
+          - commit
+
+  - repo: local
+    hooks:
+      - id: commit-message-check
+        name: "Ensure commit message follow https://www.conventionalcommits.org "
+        language: pygrep
+        entry: 'Initial commit|Merge [^\r\n]+|^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([\w\-\.]+\))?(!)?: ([\w ])+([\s\S]*)'
+        args:
+          - -i
+          - --negate
+          - --multiline
+        stages:
+          - commit-msg

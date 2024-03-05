@@ -1,0 +1,28 @@
+---
+RulesToSuppress:
+  - id: W58
+    reason: The Lambda function does have the permission to write CloudWatch Logs.
+  - id: W89
+    reason: The Lambda function does not have to be deployed inside a VPC
+  - id: W92
+    reason: No concurrencies required for this Lambda function
+  - id: W12
+    reason: The managed policy AWSAppSyncPushToCloudWatchLogs needs to use any resources
+  - id: W76
+    reason: This policy needs to be able to start/delete other complex cloudformation stacks
+  - id: W84
+    reason: log group is encrypted with the default master key
+  - id: W40
+    reason: Open egress rule is required to access public network
+  - id: W52
+    reason: Region is not specified, Can not enable ELBv2 access logging
+  - id: W64
+    reason: This API Gateway resource does not need to use UsagePlan, it is only used for CloudWatch to trigger calls
+  - id: W68
+    reason: This API Gateway resource does not need to use UsagePlan, it is only used for CloudWatch to trigger calls
+  - id: W49
+    reason: Kinesis Data Stream has enabled server-side encryption with AWS managed CMK (aws/kinesis)
+  - id: W28
+    reason: This resource does not need to be updated
+  - id: W74
+    reason: This table is set to use DEFAULT encryption, the key is owned by DDB.

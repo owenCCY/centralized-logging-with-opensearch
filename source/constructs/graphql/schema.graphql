@@ -1,0 +1,1652 @@
+scalar AWSDateTime
+scalar AWSJSON
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Query {
+  # List OpenSearch Domain names in a region
+  listDomainNames(region: String): DomainNames
+
+  # Get OpenSearch domain vpc info
+  getDomainVpc(domainName: String!, region: String): ESVPCInfo
+
+  # List imported domain details.
+  listImportedDomains(
+    metrics: Boolean
+    includeFailed: Boolean
+  ): [ImportedDomain]
+
+  # Get Domain Detail by ID
+  getDomainDetails(id: ID!, metrics: Boolean): DomainDetails
+
+  # List service logging pipeline info
+  listServicePipelines(page: Int, count: Int): ListServicePipelineResponse
+
+  # Get service logging pipeline info by ID
+  getServicePipeline(id: ID!): ServicePipeline
+
+  # List Common AWS Resources
+  listResources(
+    type: ResourceType!
+    parentId: String
+    accountId: String
+    region: String
+  ): [Resource]
+
+  # Get logging bucket for a type of resource by resource name or id
+  getResourceLoggingBucket(
+    type: ResourceType!
+    resourceName: String!
+    accountId: String
+    region: String
+  ): LoggingBucket
+
+  # Get a list of logging configurations for AWS Resource
+  getResourceLogConfigs(
+    type: ResourceType!
+    resourceName: String!
+    accountId: String
+    region: String
+  ): [ResourceLogConf]
+
+  # List logging conf info v2
+  listLogConfigs(page: Int!, count: Int!): ListLogConfigsResponse
+
+  # Get logging conf v2 info by ID
+  getLogConfig(id: ID!, version: Int): LogConfig
+
+  # List app pipeline info
+  listAppPipelines(page: Int, count: Int): ListAppPipelineResponse
+
+  # Get app pipeline info by ID
+  getAppPipeline(id: ID!): AppPipeline
+
+  # List app logging ingestion info
+  listAppLogIngestions(
+    page: Int
+    count: Int
+    appPipelineId: String
+    sourceId: String
+    region: String
+    accountId: String
+  ): ListAppLogIngestionResponse
+
+  # List instance ingestion ssm detail
+  listInstanceIngestionDetails(
+    page: Int
+    count: Int
+    ingestionId: String
+    instanceId: String
+  ): ListInstanceIngestionDetailsResponse
+
+  # Get app logging ingestion info by ID
+  getAppLogIngestion(id: ID!): AppLogIngestion
+
+  # Get k8s deployment YAML with Sidecar by ID
+  getK8sDeploymentContentWithSidecar(id: ID!): String
+
+  # Get k8s deployment YAML with DaemonSet by sourceId
+  getK8sDeploymentContentWithDaemonSet(sourceId: ID!): String
+
+  # List AWS Instance
+  listInstances(
+    maxResults: Int
+    nextToken: String
+    instanceSet: [String]
+    tags: [TagFilterInput]
+    region: String
+    accountId: String
+  ): ListInstanceResponse
+
+  # Get logging Agent Status by instanceId
+  getLogAgentStatus(
+    instanceId: String!
+    region: String
+    accountId: String
+  ): LogAgentStatus
+
+  # Get log Agent Status by instanceId
+  getInstanceAgentStatus(
+    instanceIds: [String]!
+    region: String
+    accountId: String
+    commandId: String
+  ): InstanceAgentStatusResponse
+
+  # Verify if CIDR Conflict
+  validateVpcCidr(domainName: String!, region: String): String
+
+  # Get logging source info by ID
+  getLogSource(type: LogSourceType!, sourceId: ID!): LogSource
+
+  getAutoScalingGroupConf(groupId: String!): String
+
+  listLogSources(
+    type: LogSourceType!
+    page: Int!
+    count: Int!
+  ): ListLogSourceResponse
+
+  # Check Time format
+  checkTimeFormat(timeStr: String!, formatStr: String!): CheckTimeFormatRes
+
+  # List sub account info
+  listSubAccountLinks(page: Int, count: Int): ListSubAccountLinkResponse
+
+  # Get sub account info
+  getSubAccountLink(subAccountId: String!, region: String): SubAccountLink
+
+  checkCustomPort(
+    sourceType: LogSourceType
+    syslogProtocol: ProtocolType!
+    syslogPort: Int!
+  ): checkCustomPortResponse
+
+  # Get the list of log group by log group name
+  listLogStreams(
+    logGroupName: String!
+    logStreamNamePrefix: String
+    page: Int
+    count: Int
+  ): ListLogStreamsResponse
+
+  # Get the log events by log group name and log stream name
+  getLogEvents(
+    logGroupName: String!
+    logStreamName: String!
+    startTime: Int
+    endTime: Int
+    filterPattern: String
+    limit: Int = 100
+    nextToken: String
+  ): GetLogEventsResponse
+
+  # Get the log metric history data
+  getMetricHistoryData(
+    pipelineId: String!
+    pipelineType: PipelineType!
+    metricNames: [MetricName]
+    startTime: Int
+    endTime: Int
+  ): MetricHistoryData
+
+  # Get the pipeline alarm status of a specific metric alarm
+  getPipelineAlarm(
+    pipelineId: String!
+    pipelineType: PipelineType!
+    alarmName: AlarmMetricName!
+  ): PipelineAlarm
+
+  # Check the networking requirements and any other requirements for a AOS domain
+  domainStatusCheck(
+    domainName: String!
+    region: String
+  ): DomainStatusCheckResponse
+
+  # Check if OSI is available in the current region
+  checkOSIAvailability: Boolean
+
+  listGrafanas(page: Int, count: Int): ListGrafanasResponse
+
+  getGrafana(id: String!): Grafana
+
+  checkGrafana(
+    id: String
+    url: String
+    token: String
+  ): GrafanaStatusCheckResponse
+
+  # Get Light Engine Application pipeline execution.
+  getLightEngineAppPipelineExecutionLogs(
+    pipelineId: String!
+    stateMachineName: String!
+    type: ScheduleType!
+    status: ExecutionStatus
+    startTime: String
+    endTime: String
+    lastEvaluatedKey: AWSJSON
+    limit: Int
+  ): LightEnginePipelineExecutionLogsResponse
+
+  # Get Light Engine Application pipeline details.
+  getLightEngineAppPipelineDetail(
+    pipelineId: String!
+  ): LightEnginePipelineDetailResponse
+
+  # Get Light Engine Service pipeline execution.
+  getLightEngineServicePipelineExecutionLogs(
+    pipelineId: String!
+    stateMachineName: String!
+    type: ScheduleType!
+    status: ExecutionStatus
+    startTime: String
+    endTime: String
+    lastEvaluatedKey: AWSJSON
+    limit: Int
+  ): LightEnginePipelineExecutionLogsResponse
+
+  # Get Light Engine Service pipeline details.
+  getLightEngineServicePipelineDetail(
+    pipelineId: String!
+  ): LightEnginePipelineDetailResponse
+}
+
+type Mutation {
+  # Import an OpenSearch Domain
+  importDomain(
+    domainName: String!
+    region: String
+    vpc: VPCInput
+    tags: [TagInput]
+  ): ImportDomainResponse
+
+  # Remove an OpenSearch Domain by ID V2
+  removeDomain(id: ID!, isReverseConf: Boolean): RemoveDomainResponse
+
+  # Create a new service pipeline
+  createServicePipeline(
+    type: ServiceType!
+    source: String
+    target: String
+    parameters: [ParameterInput]
+    tags: [TagInput]
+    logSourceAccountId: String
+    logSourceRegion: String
+    destinationType: DestinationType!
+    osiParams: OpenSearchIngestionInput
+    monitor: MonitorInput
+  ): String
+
+  # Create a new service pipeline with light engine
+  createLightEngineServicePipeline(
+    type: ServiceType!
+    parameters: [ParameterInput]
+    ingestion: LightEngineIngestion!
+    tags: [TagInput]
+    source: String
+    logSourceAccountId: String
+    logSourceRegion: String
+    monitor: MonitorInput
+  ): String
+
+  # Update a service pipeline
+  updateServicePipeline(id: ID!, monitor: MonitorInput): String
+
+  # Remove a service pipeline
+  deleteServicePipeline(id: ID!): String
+
+  # Create an nginx proxy stack for OpenSearch
+  createProxyForOpenSearch(id: ID!, input: ProxyInput!): String
+
+  # Create an alarm stack for OpenSearch
+  createAlarmForOpenSearch(id: ID!, input: AlarmStackInput!): String
+
+  # Delete an nginx proxy stack for OpenSearch
+  deleteProxyForOpenSearch(id: ID!): String
+
+  # Delete an alarm stack for OpenSearch domain
+  deleteAlarmForOpenSearch(id: ID!): String
+
+  # Put logging bucket for a type of resource by resource name or id
+  putResourceLoggingBucket(
+    type: ResourceType!
+    resourceName: String!
+    accountId: String
+    region: String
+  ): LoggingBucket
+
+  # Add logging configuration to resources.
+  # Log Format is only requried if the format can be customized.
+  putResourceLogConfig(
+    type: ResourceType!
+    resourceName: String!
+    accountId: String
+    region: String
+    destinationType: DestinationType!
+    destinationName: String!
+    LogFormat: String
+  ): ResourceLogConf
+
+  # *The following belongs to applog* #
+
+  # Create a logging conf v2
+  createLogConfig(
+    name: String!
+    logType: LogType!
+    syslogParser: SyslogParser
+    multilineLogParser: MultiLineLogParser
+    filterConfigMap: ProcessorFilterRegexInput
+    regex: String
+    jsonSchema: AWSJSON
+    regexFieldSpecs: [RegularSpecInput]
+    timeKey: String
+    timeOffset: String
+    timeKeyRegex: String
+    userLogFormat: String
+    userSampleLog: String
+  ): String
+
+  # Remove a logging conf v2
+  deleteLogConfig(id: ID!): String
+
+  # Update a logging conf v2
+  updateLogConfig(
+    id: ID!
+    version: Int
+    name: String!
+    logType: LogType!
+    syslogParser: SyslogParser
+    multilineLogParser: MultiLineLogParser
+    filterConfigMap: ProcessorFilterRegexInput
+    regex: String
+    jsonSchema: AWSJSON
+    regexFieldSpecs: [RegularSpecInput]
+    timeKey: String
+    timeOffset: String
+    timeKeyRegex: String
+    userLogFormat: String
+    userSampleLog: String
+  ): String
+
+  createAppPipeline(
+    bufferType: BufferType!
+    bufferParams: [BufferInput]
+    aosParams: AOSParameterInput!
+    logConfigId: ID!
+    logConfigVersionNumber: Int!
+    monitor: MonitorInput
+    force: Boolean
+    osiParams: OpenSearchIngestionInput
+    tags: [TagInput]
+  ): ID
+
+  createLightEngineAppPipeline(
+    params: LightEngineParameterInput!
+    bufferParams: [BufferInput]
+    logConfigId: ID!
+    logConfigVersionNumber: Int!
+    monitor: MonitorInput
+    force: Boolean
+    tags: [TagInput]
+  ): ID
+  # Update a app pipeline
+  updateAppPipeline(id: ID!, monitor: MonitorInput): String
+
+  # Remove a app pipeline
+  deleteAppPipeline(id: ID!): String
+
+  # Create a new app logging ingestion
+  createAppLogIngestion(
+    sourceId: String!
+    appPipelineId: String!
+    tags: [TagInput]
+    logPath: String
+    autoAddPermission: Boolean! = false
+  ): String
+
+  # Remove a app logging ingestion
+  deleteAppLogIngestion(ids: [ID!]!): String
+
+  # request to install logging agent
+  requestInstallLogAgent(
+    instanceIdSet: [String!]!
+    accountId: String
+    region: String
+  ): String
+
+  createLogSource(
+    type: LogSourceType!
+    region: String
+    accountId: String
+    ec2: EC2SourceInput # required if type == EC2
+    syslog: SyslogSourceInput # required if type == Syslog
+    eks: EKSSourceInput # required if type == EKS
+    s3: S3SourceInput # required if type == S3
+    tags: [TagInput]
+  ): ID
+
+  updateLogSource(
+    type: LogSourceType!
+    sourceId: ID!
+    action: LogSourceUpdateAction!
+    ec2: EC2SourceUpdateInput # required if type == EC2
+  ): String
+
+  deleteLogSource(type: LogSourceType!, sourceId: ID!): String
+
+  # *The following belongs to cross account* #
+
+  # Create a new cross account link
+  createSubAccountLink(
+    subAccountId: String!
+    region: String
+    subAccountName: String!
+    subAccountRoleArn: String!
+    agentInstallDoc: String!
+    agentConfDoc: String!
+    subAccountBucketName: String!
+    subAccountStackId: String!
+    subAccountKMSKeyArn: String!
+    subAccountIamInstanceProfileArn: String!
+    subAccountFlbConfUploadingEventTopicArn: String!
+    tags: [TagInput]
+  ): String
+
+  # update a  cross account link
+  updateSubAccountLink(
+    subAccountId: String!
+    region: String
+    subAccountFlbConfUploadingEventTopicArn: String!
+  ): String
+  # Remove a cross account link
+  deleteSubAccountLink(subAccountId: String!, region: String): String
+
+  # Create the alarm config of a specific Pipeline, including App and Service
+  createPipelineAlarm(
+    pipelineId: String!
+    pipelineType: PipelineType!
+    snsTopicArn: String
+    emails: String
+    snsTopicName: String
+  ): String
+
+  # Update the alarm config of a specific Pipeline, including App and Service
+  updatePipelineAlarm(
+    pipelineId: String!
+    pipelineType: PipelineType!
+    snsTopicArn: String
+    emails: String
+  ): String
+
+  # Delete the alarm config of a specific Pipeline, including App and Service
+  deletePipelineAlarm(pipelineId: String!, pipelineType: PipelineType!): String
+
+  createGrafana(
+    name: String!
+    url: String!
+    token: String!
+    tags: [TagInput]
+  ): String
+
+  updateGrafana(id: String!, url: String, token: String): String
+
+  deleteGrafana(id: String!): String
+}
+
+enum DomainImportStatus {
+  ACTIVE
+  IMPORTED
+  INACTIVE
+  IN_PROGRESS
+  UNKNOWN
+  FAILED
+}
+
+type DomainNameAndStatus {
+  domainName: String
+  status: DomainImportStatus
+}
+
+type DomainNames {
+  domainNames: [DomainNameAndStatus!]
+}
+
+enum DomainHealth {
+  GREEN
+  RED
+  YELLOW
+  UNKNOWN
+  ERROR
+}
+
+enum EngineType {
+  Elasticsearch
+  OpenSearch
+}
+
+enum AnalyticEngineType {
+  OpenSearch
+  LightEngine
+}
+
+type DomainMetrics {
+  searchableDocs: Float
+  freeStorageSpace: Float
+  health: DomainHealth
+}
+
+input VPCInput {
+  vpcId: String!
+  publicSubnetIds: String
+  privateSubnetIds: String
+  securityGroupId: String!
+}
+
+type VPCInfo {
+  vpcId: String!
+  privateSubnetIds: String
+  publicSubnetIds: String
+  securityGroupId: String
+}
+
+type ESVPCInfo {
+  vpcId: String!
+  subnetIds: [String!]
+  availabilityZones: [String]
+  securityGroupIds: [String]
+}
+
+type ImportedDomain {
+  id: ID!
+  domainName: String!
+  engine: EngineType
+  version: String!
+  endpoint: String!
+  metrics: DomainMetrics
+}
+
+# Node Info
+type Node {
+  instanceType: String!
+  instanceCount: Int
+  dedicatedMasterEnabled: Boolean
+  zoneAwarenessEnabled: Boolean
+  dedicatedMasterType: String
+  dedicatedMasterCount: Int
+  warmEnabled: Boolean
+  warmType: String
+  warmCount: Int
+  coldEnabled: Boolean
+}
+
+enum StorageType {
+  EBS
+  Instance
+}
+
+# Volume Info
+type Volume {
+  type: String!
+  size: Int!
+}
+
+# Cognito info
+type Cognito {
+  enabled: Boolean
+  userPoolId: String
+  domain: String
+  identityPoolId: String
+  roleArn: String
+}
+
+type DomainDetails {
+  id: ID!
+  domainArn: String!
+  domainName: String!
+  engine: EngineType
+  version: String!
+  endpoint: String!
+  region: String
+  accountId: String
+  vpc: VPCInfo
+  esVpc: ESVPCInfo
+  nodes: Node
+  storageType: StorageType!
+  volume: Volume
+  cognito: Cognito
+  tags: [Tag]
+  proxyStatus: StackStatus
+  proxyALB: String
+  proxyError: String
+  proxyInput: ProxyInfo
+  alarmStatus: StackStatus
+  alarmError: String
+  alarmInput: AlarmStackInfo
+  metrics: DomainMetrics
+  status: String
+  resources: [DomainRelevantResource]
+}
+
+enum StackStatus {
+  CREATING
+  DELETING
+  ERROR
+  ENABLED
+  DISABLED
+}
+
+enum PipelineStatus {
+  ACTIVE
+  INACTIVE
+  CREATING
+  DELETING
+  ERROR
+}
+enum ServiceType {
+  S3
+  CloudTrail
+  CloudFront
+  RDS
+  VPC
+  Lambda
+  ELB
+  WAF
+  WAFSampled
+  Config
+}
+
+enum ProtocolType {
+  TCP
+  UDP
+}
+
+enum PipelineMonitorStatus {
+  ENABLED
+  DISABLED
+}
+
+enum PipelineAlarmStatus {
+  ENABLED
+  DISABLED
+}
+
+enum AlarmMetricStatus {
+  ALARM
+  OK
+  INSUFFICIENT_DATA
+  LOADING
+}
+
+type Tag {
+  key: String
+  value: String
+}
+
+type ServicePipeline {
+  id: ID!
+  type: ServiceType!
+  destinationType: DestinationType
+  source: String
+  target: String
+  parameters: [Parameter]
+  createdAt: String
+  status: PipelineStatus
+  tags: [Tag]
+  error: String
+  monitor: MonitorDetail
+  osiParams: OpenSearchIngestionParams
+  osiPipelineName: String
+  processorLogGroupName: String
+  helperLogGroupName: String
+  logEventQueueName: String
+  deliveryStreamName: String
+  bufferResourceName: String
+  stackId: String
+  logSourceAccountId: String
+  logSourceRegion: String
+  engineType: AnalyticEngineType
+  lightEngineParams: LightEngineParameter
+}
+
+type LightEngineIngestionResp {
+  bucket: String!
+  prefix: String!
+}
+
+type ListServicePipelineResponse {
+  pipelines: [ServicePipeline]
+  total: Int
+}
+
+input TagInput {
+  key: String
+  value: String
+}
+
+input TagFilterInput {
+  Key: String
+  Values: [String]
+}
+
+type Parameter {
+  parameterKey: String
+  parameterValue: String
+}
+
+input ParameterInput {
+  parameterKey: String
+  parameterValue: String
+}
+
+input LightEngineIngestion {
+  bucket: String!
+  prefix: String!
+}
+
+type Resource {
+  id: String!
+  name: String!
+  parentId: String
+  description: String
+}
+
+enum ResourceType {
+  S3Bucket
+  VPC
+  Subnet
+  SecurityGroup
+  Certificate
+  Trail
+  KeyPair
+  Distribution
+  RDS
+  Lambda
+  ELB
+  WAF
+  Config
+  EKSCluster
+  ASG
+  SNS
+}
+
+# Log Format is only requried if the format can be customized.
+# the processor need to know the customized fields
+type ResourceLogConf {
+  destinationType: DestinationType!
+  destinationName: String!
+  name: String
+  logFormat: String
+  region: String
+}
+
+enum DestinationType {
+  S3
+  CloudWatch
+  KDS
+  KDF
+}
+
+input ProxyInput {
+  vpc: VPCInput!
+  certificateArn: String!
+  keyName: String!
+  customEndpoint: String!
+  cognitoEndpoint: String
+  proxyInstanceType: String
+  proxyInstanceNumber: String
+}
+
+type ProxyInfo {
+  vpc: VPCInfo
+  certificateArn: String
+  keyName: String
+  customEndpoint: String
+  cognitoEndpoint: String
+}
+
+enum AlarmType {
+  CLUSTER_RED
+  CLUSTER_YELLOW
+  FREE_STORAGE_SPACE
+  WRITE_BLOCKED
+  NODE_UNREACHABLE
+  SNAPSHOT_FAILED
+  CPU_UTILIZATION
+  JVM_MEMORY_PRESSURE
+  KMS_KEY_DISABLED
+  KMS_KEY_INACCESSIBLE
+  MASTER_CPU_UTILIZATION
+  MASTER_JVM_MEMORY_PRESSURE
+}
+
+input AlarmInput {
+  type: AlarmType
+  value: String
+}
+
+input AlarmStackInput {
+  alarms: [AlarmInput]
+  email: String
+  phone: String
+}
+
+type AlarmInfo {
+  type: AlarmType
+  value: String
+}
+
+type AlarmStackInfo {
+  alarms: [AlarmInfo]
+  email: String
+  phone: String
+}
+
+type LoggingBucket {
+  enabled: Boolean
+  bucket: String
+  prefix: String
+  source: LoggingBucketSource
+}
+
+# *The following belongs to applog* #
+enum LogType {
+  JSON
+  Regex
+  Nginx
+  Apache
+  Syslog
+  SingleLineText
+  MultiLineText
+}
+
+enum MultiLineLogParser {
+  JAVA_SPRING_BOOT
+  CUSTOM
+}
+
+enum SyslogParser {
+  RFC5424
+  RFC3164
+  CUSTOM
+}
+
+enum ArchiveFormat {
+  gzip
+  json
+  text
+}
+
+enum LogSourceType {
+  EC2
+  S3
+  EKSCluster
+  Syslog
+}
+
+enum LogSourceUpdateAction {
+  ADD
+  REMOVE
+  MODIFY
+}
+
+enum LoggingBucketSource {
+  WAF
+  KinesisDataFirehoseForWAF
+}
+
+enum ErrorCode {
+  DuplicatedIndexPrefix
+  DuplicatedWithInactiveIndexPrefix
+  OverlapIndexPrefix
+  OverlapWithInactiveIndexPrefix
+  AccountNotFound
+  OldAOSVersion
+  AOSNotInPrivateSubnet
+  WithoutNAT
+  EKS_CLUSTER_NOT_CLEANED
+  ASSOCIATED_STACK_UNDER_PROCESSING
+  SVC_PIPELINE_NOT_CLEANED
+  APP_PIPELINE_NOT_CLEANED
+  DOMAIN_ALREADY_IMPORTED
+  DOMAIN_NOT_ACTIVE
+  DOMAIN_UNDER_PROCESSING
+  DOMAIN_RELATED_RESOURCES_REVERSE_FAILED
+  IMPORT_OPENSEARCH_DOMAIN_FAILED
+  REMOVE_OPENSEARCH_DOMAIN_FAILED
+  UNSUPPORTED_DOMAIN_ENGINE
+  DOMAIN_NETWORK_TYPE_NOT_PRIVATE
+  OLD_DOMAIN_VERSION
+  SUBNET_WITHOUT_NAT
+  AOS_SECURITY_GROUP_CHECK_FAILED
+  NETWORK_ACL_CHECK_FAILED
+  VPC_PEERING_CHECK_FAILED
+  AOS_VPC_ROUTING_CHECK_FAILED
+  SOLUTION_VPC_ROUTING_CHECK_FAILED
+  DUPLICATED_INDEX_PREFIX
+  DUPLICATED_WITH_INACTIVE_INDEX_PREFIX
+  OVERLAP_INDEX_PREFIX
+  OVERLAP_WITH_INACTIVE_INDEX_PREFIX
+  UNSUPPORTED_ACTION_HAS_INGESTION
+  UNSUPPORTED_ACTION_SOURCE_HAS_INGESTION
+  UPDATE_CWL_ROLE_FAILED
+  ASSUME_ROLE_CHECK_FAILED
+  ACCOUNT_NOT_FOUND
+  ACCOUNT_ALREADY_EXISTS
+  ITEM_NOT_FOUND
+  UNKNOWN_ERROR
+  GRAFANA_URL_CONNECTIVITY_FAILED
+  GRAFANA_TOKEN_VALIDATION_FAILED
+  GRAFANA_HAS_INSTALLED_ATHENA_PLUGIN_FAILED
+  GRAFANA_DATA_SOURCE_PERMISSION_CHECK_FAILED
+  GRAFANA_FOLDER_PERMISSION_CHECK_FAILED
+  GRAFANA_DASHBOARDS_PERMISSION_CHECK_FAILED
+}
+
+type LogConfig {
+  id: ID
+  version: Int
+  createdAt: String
+  name: String
+  logType: LogType
+  syslogParser: SyslogParser
+  multilineLogParser: MultiLineLogParser
+  filterConfigMap: ProcessorFilterRegex
+  regex: String
+  jsonSchema: AWSJSON
+  regexFieldSpecs: [RegularSpec]
+  timeKey: String
+  timeOffset: String
+  timeKeyRegex: String
+  userLogFormat: String
+  userSampleLog: String
+}
+
+input ProcessorFilterRegexInput {
+  enabled: Boolean!
+  filters: [LogConfFilterInput]
+}
+
+type ProcessorFilterRegex {
+  enabled: Boolean
+  filters: [LogConfFilter]
+}
+
+input LogConfFilterInput {
+  key: String!
+  condition: LogConfFilterCondition!
+  value: String!
+}
+
+type LogConfFilter {
+  key: String!
+  condition: LogConfFilterCondition!
+  value: String!
+}
+
+enum LogConfFilterCondition {
+  Include
+  Exclude
+}
+
+type ListLogConfigsResponse {
+  logConfigs: [LogConfig]
+  total: Int
+}
+
+type LogSource {
+  sourceId: ID!
+  type: LogSourceType
+  accountId: String
+  region: String
+  eks: EKSSource
+  s3: S3Source
+  ec2: EC2Source
+  syslog: SyslogSource
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+  status: PipelineStatus
+  tags: [Tag]
+}
+
+type ListLogSourceResponse {
+  logSources: [LogSource]
+  total: Int
+}
+
+input AOSParameterInput {
+  vpc: VPCInput!
+  opensearchArn: String!
+  opensearchEndpoint: String!
+  domainName: String!
+  indexPrefix: String!
+  warmLogTransition: String
+  coldLogTransition: String
+  logRetention: String
+  rolloverSize: String
+  codec: Codec
+  indexSuffix: IndexSuffix
+  refreshInterval: String
+  shardNumbers: Int!
+  replicaNumbers: Int!
+  engine: EngineType!
+  failedLogBucket: String!
+}
+
+input LightEngineParameterInput {
+  centralizedBucketName: String!
+  centralizedBucketPrefix: String!
+  centralizedTableName: String!
+  logProcessorSchedule: String!
+  logMergerSchedule: String!
+  logArchiveSchedule: String!
+  logMergerAge: String!
+  logArchiveAge: String!
+  importDashboards: String!
+  grafanaId: String
+  recipients: String
+}
+enum IndexSuffix {
+  yyyy_MM_dd
+  yyyy_MM_dd_HH
+  yyyy_MM
+  yyyy
+}
+enum Codec {
+  best_compression
+  default
+}
+
+type AOSParameter {
+  opensearchArn: String
+  domainName: String
+  indexPrefix: String
+  warmLogTransition: String
+  coldLogTransition: String
+  logRetention: String
+  rolloverSize: String
+  codec: Codec
+  indexSuffix: IndexSuffix
+  refreshInterval: String
+  shardNumbers: Int
+  replicaNumbers: Int
+  engine: EngineType
+}
+
+enum NotificationService {
+  SNS
+  SES
+}
+
+type LightEngineParameter {
+  stagingBucketPrefix: String!
+  centralizedBucketName: String!
+  centralizedBucketPrefix: String!
+  centralizedTableName: String!
+  logProcessorSchedule: String!
+  logMergerSchedule: String!
+  logArchiveSchedule: String!
+  logMergerAge: String!
+  logArchiveAge: String!
+  importDashboards: String!
+  grafanaId: String
+  recipients: String
+  notificationService: NotificationService
+  enrichmentPlugins: String
+}
+
+type LightEngineTableMetadata {
+  databaseName: String!
+  tableName: String!
+  location: String!
+  classification: String!
+  dashboardName: String
+  dashboardLink: String
+}
+
+type AnalyticsEngine {
+  engineType: AnalyticEngineType!
+  table: LightEngineTableMetadata
+  metric: LightEngineTableMetadata
+}
+
+enum SchedulerType {
+  EventBridgeScheduler
+  EventBridgeEvents
+}
+
+type Scheduler {
+  type: SchedulerType!
+  group: String!
+  name: String!
+  expression: String!
+  age: Int
+}
+
+type StateMachine {
+  arn: String!
+  name: String!
+}
+
+enum ScheduleType {
+  LogProcessor
+  LogMerger
+  LogArchive
+  LogMergerForMetrics
+  LogArchiveForMetrics
+}
+
+type Schedule {
+  type: ScheduleType!
+  stateMachine: StateMachine!
+  scheduler: Scheduler!
+}
+
+type LightEnginePipelineDetailResponse {
+  analyticsEngine: AnalyticsEngine
+  schedules: [Schedule]
+}
+
+enum ExecutionStatus {
+  Running
+  Succeeded
+  Failed
+  Timed_out
+  Aborted
+}
+
+type LightEnginePipelineExecutionLog {
+  executionName: String
+  executionArn: String
+  taskId: String
+  startTime: String
+  endTime: String
+  status: ExecutionStatus
+}
+type LightEnginePipelineExecutionLogsResponse {
+  items: [LightEnginePipelineExecutionLog]
+  lastEvaluatedKey: AWSJSON
+}
+
+type AppPipeline {
+  pipelineId: ID!
+  bufferType: BufferType
+  bufferParams: [BufferParameter]
+  aosParams: AOSParameter
+  lightEngineParams: LightEngineParameter
+  createdAt: String
+  status: PipelineStatus
+  logConfigId: String
+  logConfigVersionNumber: Int
+  logConfig: LogConfig
+  bufferAccessRoleArn: String
+  bufferAccessRoleName: String
+  bufferResourceName: String
+  bufferResourceArn: String
+  processorLogGroupName: String
+  helperLogGroupName: String
+  logEventQueueName: String
+  monitor: MonitorDetail
+  osiParams: OpenSearchIngestionParams
+  osiPipelineName: String
+  minCapacity: Int
+  maxCapacity: Int
+  stackId: String
+  error: String
+  engineType: AnalyticEngineType
+  tags: [Tag]
+}
+
+type ListAppPipelineResponse {
+  appPipelines: [AppPipeline]
+  total: Int
+}
+
+type AppLogIngestion {
+  id: ID!
+  stackId: String
+  stackName: String
+  appPipelineId: String
+  logPath: String
+  sourceId: String
+  sourceType: String
+  createdAt: String
+  status: String
+  tags: [Tag]
+  accountId: String
+  region: String
+}
+
+type InstanceIngestionDetail {
+  instanceId: String
+  ssmCommandId: String
+  ssmCommandStatus: String
+  details: String
+}
+
+type ListAppLogIngestionResponse {
+  appLogIngestions: [AppLogIngestion]
+  total: Int
+}
+type ListInstanceIngestionDetailsResponse {
+  instanceIngestionDetail: [InstanceIngestionDetail]
+  total: Int
+}
+
+enum LogAgentStatus {
+  Online
+  Offline
+  Installing
+  Installed
+  Not_Installed
+  Unknown
+}
+
+type InstanceAgentStatusResponse {
+  commandId: String
+  instanceAgentStatusList: [InstanceAgentStatus]
+}
+
+type InstanceAgentStatus {
+  instanceId: String
+  status: LogAgentStatus
+  invocationOutput: String
+  curlOutput: String
+}
+
+input LogAgentParameterInput {
+  agentName: String
+  version: String
+}
+
+type LogAgentParameter {
+  agentName: String
+  version: String
+}
+
+# Instance info
+type Instance {
+  id: ID!
+  platformName: String
+  ipAddress: String
+  computerName: String
+  name: String
+}
+
+type ListInstanceResponse {
+  instances: [Instance]
+  nextToken: String
+}
+
+input RegularSpecInput {
+  key: String!
+  type: String!
+  format: String
+}
+
+type RegularSpec {
+  key: String!
+  type: String!
+  format: String
+}
+
+enum EKSDeployKind {
+  DaemonSet
+  Sidecar
+}
+enum CRI {
+  containerd
+  docker
+}
+
+enum IngestionMode {
+  ONE_TIME
+  ON_GOING
+}
+
+enum CompressionType {
+  GZIP
+  NONE
+}
+
+type S3Source {
+  mode: IngestionMode
+  bucketName: String
+  keyPrefix: String
+  keySuffix: String
+  compressionType: CompressionType
+}
+
+input S3SourceInput {
+  mode: IngestionMode
+  bucketName: String
+  keyPrefix: String
+  keySuffix: String
+  compressionType: CompressionType
+}
+
+type SyslogSource {
+  protocol: ProtocolType
+  port: Int
+  nlbArn: String
+  nlbDNSName: String
+}
+
+input SyslogSourceInput {
+  protocol: ProtocolType
+  port: Int
+  nlbArn: String
+  nlbDNSName: String
+}
+
+enum EC2GroupType {
+  EC2
+  ASG
+}
+
+enum EC2GroupPlatform {
+  Linux
+}
+
+type EC2Instances {
+  instanceId: String!
+  # instanceName: String
+  # platformName: String
+  # platformVersion: String
+}
+
+input EC2InstancesInput {
+  instanceId: String
+  # instanceName: String
+  # platformName: String
+  # platformVersion: String
+}
+
+type EC2Source {
+  groupName: String!
+  groupType: EC2GroupType!
+  groupPlatform: EC2GroupPlatform!
+  asgName: String
+  instances: [EC2Instances]
+}
+
+input EC2SourceInput {
+  groupName: String
+  groupType: EC2GroupType
+  groupPlatform: EC2GroupPlatform
+  asgName: String
+  instances: [EC2InstancesInput]
+}
+
+input EC2SourceUpdateInput {
+  instances: [EC2InstancesInput]
+}
+
+type EKSSource {
+  eksClusterName: String
+  eksClusterArn: String
+  cri: CRI
+  vpcId: String
+  eksClusterSGId: String
+  subnetIds: [String]
+  oidcIssuer: String
+  endpoint: String
+  logAgentRoleArn: String
+  deploymentKind: EKSDeployKind
+}
+
+input EKSSourceInput {
+  eksClusterName: String
+  cri: CRI
+  deploymentKind: EKSDeployKind
+}
+
+type CheckTimeFormatRes {
+  isMatch: Boolean
+}
+
+type SubAccountLink {
+  id: ID
+  subAccountId: String
+  region: String
+  subAccountName: String
+  subAccountRoleArn: String
+  agentInstallDoc: String
+  agentConfDoc: String
+  subAccountBucketName: String
+  subAccountStackId: String
+  subAccountKMSKeyArn: String
+  subAccountVpcId: String
+  subAccountPublicSubnetIds: String
+  subAccountIamInstanceProfileArn: String
+  subAccountFlbConfUploadingEventTopicArn: String
+  createdAt: String
+  status: String
+  tags: [Tag]
+}
+
+type ListSubAccountLinkResponse {
+  subAccountLinks: [SubAccountLink]
+  total: Int
+}
+
+type checkCustomPortResponse {
+  isAllowedPort: Boolean
+  msg: String
+  recommendedPort: Int
+}
+
+enum BufferType {
+  None
+  KDS
+  S3
+  MSK
+}
+type BufferParameter {
+  paramKey: String
+  paramValue: String
+}
+
+input BufferInput {
+  paramKey: String
+  paramValue: String
+}
+
+type LogStream {
+  logStreamName: String
+  creationTime: String
+  firstEventTimestamp: String
+  lastEventTimestamp: String
+  lastIngestionTime: String
+  uploadSequenceToken: String
+  arn: String
+  storedBytes: Int
+}
+
+type ListLogStreamsResponse {
+  logStreams: [LogStream]
+  total: Int
+}
+
+type LogEvent {
+  timestamp: String
+  message: String
+  ingestionTime: String
+}
+
+type GetLogEventsResponse {
+  logEvents: [LogEvent]
+  nextForwardToken: String
+  nextBackwardToken: String
+}
+
+type DataSerie {
+  name: String
+  data: [Float]
+}
+
+type GraphXaxis {
+  categories: [Float]
+}
+
+type MetricHistoryData {
+  series: [DataSerie]
+  xaxis: GraphXaxis
+}
+
+enum PipelineType {
+  APP
+  SERVICE
+}
+
+enum AlarmMetricName {
+  OLDEST_MESSAGE_AGE_ALARM
+  PROCESSOR_ERROR_INVOCATION_ALARM
+  PROCESSOR_ERROR_RECORD_ALARM
+  PROCESSOR_DURATION_ALARM
+  KDS_THROTTLED_RECORDS_ALARM
+  FLUENTBIT_OUTPUT_RETRIED_RECORDS_ALARM
+}
+
+type AlarmMetricDetail {
+  name: AlarmMetricName
+  status: AlarmMetricStatus
+  resourceId: String
+}
+
+type PipelineAlarm {
+  alarms: [AlarmMetricDetail]
+}
+
+enum DomainStatusCheckType {
+  FAILED
+  PASSED
+  CHECKING
+  NOT_STARTED
+}
+
+type DomainStatusCheckDetail {
+  name: String
+  values: [String]
+  errorCode: ErrorCode
+  status: DomainStatusCheckType
+}
+
+type DomainStatusCheckResponse {
+  status: DomainStatusCheckType
+  details: [DomainStatusCheckDetail]
+  multiAZWithStandbyEnabled: Boolean
+}
+
+type GrafanaStatusCheckResponse {
+  status: DomainStatusCheckType
+  details: [DomainStatusCheckDetail]
+}
+
+enum ResourceStatus {
+  CREATED
+  UPDATED
+  DELETED
+  REVERSED
+  UNCHANGED
+  ERROR
+}
+
+type DomainRelevantResource {
+  name: String
+  values: [String]
+  status: ResourceStatus
+}
+
+type RemoveDomainResponse {
+  error: String
+  errorCode: ErrorCode
+  resources: [DomainRelevantResource]
+}
+
+input MonitorInput {
+  status: PipelineMonitorStatus
+  pipelineAlarmStatus: PipelineAlarmStatus
+  snsTopicName: String
+  snsTopicArn: String
+  emails: String
+}
+
+type MonitorDetail {
+  status: PipelineMonitorStatus
+  backupBucketName: String
+  errorLogPrefix: String
+  pipelineAlarmStatus: PipelineAlarmStatus
+  snsTopicName: String
+  snsTopicArn: String
+  emails: String
+}
+
+type OpenSearchIngestionParams {
+  minCapacity: Int
+  maxCapacity: Int
+}
+
+input OpenSearchIngestionInput {
+  minCapacity: Int
+  maxCapacity: Int
+}
+
+type ImportDomainResponse {
+  id: String
+  resources: [DomainRelevantResource]
+}
+
+enum MetricName {
+  TotalLogs
+  FailedLogs
+  ExcludedLogs
+  LoadedLogs
+  SQSNumberOfMessagesSent
+  SQSNumberOfMessagesDeleted
+  SQSApproximateNumberOfMessagesVisible
+  SQSApproximateAgeOfOldestMessage
+  ProcessorFnError
+  ProcessorFnConcurrentExecutions
+  ProcessorFnDuration
+  ProcessorFnThrottles
+  ProcessorFnInvocations
+  ReplicationFnError
+  ReplicationFnConcurrentExecutions
+  ReplicationFnDuration
+  ReplicationFnThrottles
+  ReplicationFnInvocations
+  KDFIncomingBytes
+  KDFIncomingRecords
+  KDFDeliveryToS3Bytes
+  KDSIncomingBytes
+  KDSIncomingRecords
+  KDSPutRecordsBytes
+  KDSThrottledRecords
+  KDSWriteProvisionedThroughputExceeded
+  SyslogNLBActiveFlowCount
+  SyslogNLBProcessedBytes
+  FluentBitInputBytes
+  FluentBitInputRecords
+  FluentBitOutputDroppedRecords
+  FluentBitOutputErrors
+  FluentBitOutputRetriedRecords
+  FluentBitOutputRetriesFailed
+  FluentBitOutputRetries
+  FluentBitOutputProcBytes
+  FluentBitOutputProcRecords
+  OSICPUUsage
+  OSIComputeUnits
+  OSIMemoryUsage
+  OSIBufferUsage
+  OSIBufferOverflowDrops
+  OSIObjectsSucceeded
+  OSIS3ObjectsEvents
+  OSIS3ObjectsEventsSum
+  OSISqsMessagesReceived
+  OSISqsMessagesDeleted
+  OSISqsMessagesFailed
+  OSISqsMessageDelayCount
+  OSISqsMessageDelaySum
+  OSIBytesTransmitted
+  OSIDocumentsWritten
+  OSIDocumentsFailedWrite
+  OSIDocumentsRetriedWrite
+  OSIDLQS3RecordsSuccess
+  OSIDLQS3RecordsFailed
+}
+
+type Grafana {
+  id: ID!
+  name: String!
+  url: String!
+  createdAt: String
+  tags: [Tag]
+}
+
+type ListGrafanasResponse {
+  grafanas: [Grafana]
+  total: Int
+}

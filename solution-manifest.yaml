@@ -1,0 +1,54 @@
+---
+id: SO8025
+name: centralized-logging-with-opensearch
+version: v2.1.0
+cloudformation_templates: 
+  - template: CentralizedLogging.template
+    main_template: true
+  - template: CentralizedLoggingFromExistingVPC.template
+    main_template: true
+  - template: CentralizedLoggingWithOIDC.template
+    main_template: true    
+  - template: CentralizedLoggingFromExistingVPCWithOIDC.template
+    main_template: true  
+  - template: S3AccessLog.template
+  - template: CloudTrailLog.template
+  - template: CloudTrailLogOSIProcessor.template
+  - template: RDSLog.template
+  - template: LambdaLog.template
+  - template: ELBLog.template
+  - template: ELBLogOSIProcessor.template
+  - template: WAFLog.template
+  - template: WAFSampledLog.template
+  - template: WAFLogOSIProcessor.template
+  - template: VPCFlowLog.template
+  - template: VPCFlowLogOSIProcessor.template
+  - template: ConfigLog.template
+  - template: AlarmForOpenSearch.template
+  - template: AppLogKDSBuffer.template
+  - template: AppLogKDSBufferNoAutoScaling.template
+  - template: AppLogS3Buffer.template
+  - template: AppLogS3BufferOSIProcessor.template
+  - template: AppLogMSKBuffer.template
+  - template: CloudFrontLog.template
+  - template: CloudFrontRealtimeLogKDSBuffer.template
+  - template: CloudFrontRealtimeLogKDSBufferNoAutoScaling.template
+  - template: CloudWatchLogKDSBuffer.template
+  - template: CloudWatchLogKDSBufferNoAutoScaling.template
+  - template: AppLog.template
+  - template: CrossAccount.template
+  - template: S3SourceStack.template
+  - template: SyslogtoECSStack.template
+  - template: MicroBatch.template
+  - template: MicroBatchFromExistingVPC.template
+  - template: MicroBatchLogIngestion.template
+  - template: MicroBatchAwsServicesWafPipeline.template
+  - template: MicroBatchAwsServicesCloudFrontPipeline.template
+  - template: MicroBatchAwsServicesAlbPipeline.template
+  - template: MicroBatchAwsServicesCloudTrailPipeline.template
+  - template: MicroBatchAwsServicesVpcFlowPipeline.template
+  - template: MicroBatchApplicationFluentBitPipeline.template
+  - template: MicroBatchApplicationS3Pipeline.template
+  - template: NginxForOpenSearch.template
+build_environment:
+    build_image: 'aws/codebuild/standard:7.0'
