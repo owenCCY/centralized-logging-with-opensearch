@@ -182,6 +182,7 @@ export class CWtoFirehosetoS3Stack extends Construct {
             ],
             resources: [
               `arn:${Aws.PARTITION}:logs:${Aws.REGION}:${Aws.ACCOUNT_ID}:*`,
+              `arn:${Aws.PARTITION}:logs:*:${Aws.ACCOUNT_ID}:destination:*`,
             ],
           }),
           new iam.PolicyStatement({
