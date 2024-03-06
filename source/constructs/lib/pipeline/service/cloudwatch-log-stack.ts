@@ -468,7 +468,7 @@ export class CloudWatchLogStack extends SolutionStack {
             ],
             resources: [
               `arn:${Aws.PARTITION}:logs:${Aws.REGION}:${Aws.ACCOUNT_ID}:*`,
-              `arn:${Aws.PARTITION}:logs:*:${Aws.ACCOUNT_ID}:destination:*`,
+              `arn:${Aws.PARTITION}:logs:${Aws.REGION}:${Aws.ACCOUNT_ID}:destination:*`,
             ],
           }),
           new iam.PolicyStatement({
