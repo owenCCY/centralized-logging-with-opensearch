@@ -174,7 +174,7 @@
       "maxShardNum": "最大分片数",
       "maxShardNumDesc": "指定最大分片数。",
       "maxShardNumError": "最大分片数必须大于分片个数",
-      "overlapIndexError": "似乎配置了一个活动或已删除的管道与您输入的索引重叠。请选择“编辑”进行更新。({{oldIndex}})",
+      "overlapIndexError": "似乎配置了一个活动或已删除的管道与您输入的索引重叠。请选择“编辑”进行更新。({{message}})",
       "duplicatedIndexError": "看起来有一个活动或已删除的管道配置了您输入的索引。要继续创建此新管道并将日志发送到同一索引，请选择“继续创建”。如果您想使用 而是使用不同的索引前缀，请选择“编辑”进行更新。",
       "s3StorageClass": "前缀的 S3 存储层",
       "s3StorageClassDesc": "为缓冲日志数据的前缀选择存储层。"

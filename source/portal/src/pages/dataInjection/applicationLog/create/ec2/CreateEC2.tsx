@@ -955,7 +955,7 @@ const AppLogCreateEC2: React.FC = () => {
           confirmButtonText: defaultStr(t("button.cancel")),
           cancelButtonText: defaultStr(t("button.edit")),
           text: t("applog:create.ingestSetting.overlapIndexError", {
-            oldIndex: message,
+            message: message,
           }),
         }).then((result) => {
           if (result.isDismissed) {
