@@ -46,8 +46,7 @@ import { EcsClusterStack } from './main/ecs-cluster-stack';
 import { PortalStack } from './main/portal-stack';
 import { VpcStack } from './main/vpc-stack';
 import { MicroBatchStack } from './microbatch/main/services/amazon-services-stack';
-import * as fs from 'fs';
-import * as path from 'path';
+import { EnforceUnmanagedS3BucketNotificationsAspects, UseS3BucketNotificationsWithRetryAspects } from './util/stack-helper';
 
 const { VERSION } = process.env;
 
@@ -403,6 +402,28 @@ export class MainStack extends Stack {
         objectOwnership: s3.ObjectOwnership.OBJECT_WRITER,
         versioned: true,
         enforceSSL: true,
+        notificationsHandlerRole: new iam.Role(this, 'NotiRole', {
+          assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
+          description: 'A role for s3 bucket notification lambda',
+          managedPolicies: [
+            iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
+          ],
+          inlinePolicies: {
+            BucketNotification: iam.PolicyDocument.fromJson({
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:PutBucketNotification",
+                    "s3:GetBucketNotification"
+                  ],
+                  "Resource": "*"
+                }
+              ]
+            }),
+          },
+        }),
         lifecycleRules: [
           {
             transitions: [
@@ -555,24 +576,11 @@ export class MainStack extends Stack {
       );
     }
 
-    class UseS3BucketNotificationsWithRetryAspects implements IAspect {
-      public constructor() { }
-
-      public visit(node: IConstruct): void {
-        if (
-          node instanceof CfnResource &&
-          node.cfnResourceType === "AWS::Lambda::Function"
-        ) {
-          const code = fs.readFileSync(path.join(__dirname, '../lambda/custom-resource/put_s3_bucket_notification_with_retry.py'), 'utf8');
-          node.addPropertyOverride("Code.ZipFile", code);
-        }
-      }
-    }
-
     const notificationHandler = Stack.of(this).node.tryFindChild('BucketNotificationsHandler050a0587b7544547bf325f094a3db834');
     if (notificationHandler) {
       Aspects.of(notificationHandler).add(new UseS3BucketNotificationsWithRetryAspects())
     }
+    Aspects.of(this).add(new EnforceUnmanagedS3BucketNotificationsAspects());
 
     // init MicroBatch Stack
     microBatchStack = new MicroBatchStack(this, 'MicroBatchStack', {
