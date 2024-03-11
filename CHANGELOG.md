@@ -9,13 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Resolved a bug where upgrading from versions earlier than 2.1.0 led to the loss of S3 notifications, preventing the proper collection of logs from the S3 buffer #261.
-- Addressed a problem where including the "@timestamp" field in log configurations caused failures in creating index_templates, leading to an inability to write data to OpenSearch #262.
-- Fixed a bug in the log-processor lambda due to the absence of the 'batch_size' variable, causing process failures #242.
-- Solved a deployment issue with the Log Analytics Pipeline, which previously could not deploy cross-account lambda pipelines #227.
-- Corrected an issue with the ELB Service Log Parser that resulted in the omission of numerous log lines #243.
-- Amended an inaccurate warning message displayed during pipeline creation with an existing index in OpenSearch #260.
-- Resolved incorrect error messaging when deleting an instance group in Application Logs #229.
+- Resolved a bug where upgrading from versions earlier than 2.1.0 led to the loss of S3 notifications, preventing the proper collection of logs from the S3 buffer. #261
+- Addressed a problem where including the "@timestamp" field in log configurations caused failures in creating index_templates, leading to an inability to write data to OpenSearch. #262
+- Fixed a bug in the log processor Lambda due to the absence of the 'batch_size' variable, causing process failures. #242
+- Solved a deployment issue with the Log Analytics Pipeline, which previously could not deploy cross-account Lambda pipelines. #227
+- Corrected an issue with the ALB Service Log Parser that resulted in the omission of numerous log lines. #243
+- Amended an inaccurate warning message displayed during pipeline creation with an existing index in OpenSearch. #260
+- Amended an inaccurate error messaging when deleting an Instance Group in application log pipelines. #229
 
 ## [2.1.1] - 2023-12-05
 
