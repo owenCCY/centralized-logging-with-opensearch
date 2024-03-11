@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.2] - 2024-03-14
+
+### Fixed
+
+- Fixed the issue that upgrading from a version below 2.1.0 caused the loss of S3 notifications, and the logs from S3 buffer cannot be collected properly. #261
+- Fixed the issue that if the log configuration includes the "@timestamp" field, it will result in the inability to create an index_template, and the data cannot be written to OpenSearch. #262
+- Fixed the issue that log-processor: lambda failing because of missing variable 'batch_size' #242
+- Fixed the issue that Log Analytics Pipeline: Unable to deploy cross account lambda pipelines #227
+- Fixed the issue that ELB Service: Log Parser skipping lots of lines #243
+- Fixed the issue that wrong warning message when creating pipeline with existing index in OpenSearch #260
+- Fixed the issue that Application Logs: Wrong error message when deleting an instance group #229
+
 ## [2.1.1] - 2023-12-05
 
 ### Fixed
