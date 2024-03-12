@@ -60,7 +60,7 @@ source/constructs/lambda/microbatch/test/test_aws.py:1557
 source/constructs/lambda/microbatch/test/test_aws.py:1527
 source/constructs/lambda/microbatch/test/test_aws.py:1544
 source/constructs/lambda/microbatch/test/test_aws.py:1561
-source/constructs/lambda/microbatch/test/test_pipeline_resources_builder.py:7702
+source/constructs/lambda/microbatch/test/test_pipeline_resources_builder.py:7704
 source/constructs/lambda/microbatch/utils/aws/s3/__init__.py:583
 source/constructs/lambda/microbatch/utils/aws/s3/__init__.py:584
 source/constructs/lambda/microbatch/utils/aws/s3/__init__.py:585
