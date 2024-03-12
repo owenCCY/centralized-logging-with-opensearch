@@ -293,4 +293,4 @@ node-npmaudit
 pydantic==1.10.6
 openapi-spec-validator==0.5.7
 jsonSchema==4.19.0
-
+moto==4.2.13
