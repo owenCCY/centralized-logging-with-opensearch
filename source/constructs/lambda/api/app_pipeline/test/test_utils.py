@@ -304,7 +304,6 @@ def test_make_index_template_json_schema():
 def test_make_index_template():
     from util.utils import make_index_template
 
-<<<<<<< HEAD
 
     config = LogConfig(
         version=0,
@@ -341,8 +340,6 @@ def test_make_index_template():
         },
     } == make_index_template(config, index_alias="app-singleline")
 
-=======
->>>>>>> release/v2.1.1
     config = LogConfig(
         version=0,
         name="test-config",
@@ -372,7 +369,6 @@ def test_make_index_template():
                 "properties": {
                     "name": {"type": "string"},
                     "time": {"type": "date"},
-                    "@timestamp": {"type": "alias", "path": "time"},
                 }
             },
         },
@@ -396,7 +392,6 @@ def test_make_index_template():
                 "properties": {
                     "name": {"type": "string"},
                     "time": {"type": "date"},
-                    "@timestamp": {"type": "alias", "path": "time"},
                 }
             },
         },
