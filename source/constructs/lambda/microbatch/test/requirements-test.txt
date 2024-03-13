@@ -22,4 +22,3 @@ urllib3<1.27,>=1.25.4
 wcwidth
 maxminddb
 user_agents
-func_timeout
