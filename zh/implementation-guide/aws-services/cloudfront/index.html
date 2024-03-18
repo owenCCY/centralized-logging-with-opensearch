@@ -1,0 +1,2584 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://aws-solutions.github.io/centralized-logging-with-opensearch/implementation-guide/aws-services/cloudfront/">
+      
+      <link rel="icon" href="../../../images/aws-solutions.png">
+      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-8.5.3">
+    
+    
+      
+        <title>Amazon CloudFront - Centralized Logging with OpenSearch</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.7a952b86.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.cbb835fc.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#amazon-cloudfront" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="Centralized Logging with OpenSearch" class="md-header__button md-logo" aria-label="Centralized Logging with OpenSearch" data-md-component="logo">
+      
+  <img src="../../../images/aws-solutions.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Centralized Logging with OpenSearch
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Amazon CloudFront
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <div class="md-header__option">
+        <div class="md-select">
+          
+          <button class="md-header__button md-icon" aria-label="选择当前语言">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.52 17.52 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04M18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12m-2.62 7 1.62-4.33L19.12 17h-3.24Z"/></svg>
+          </button>
+          <div class="md-select__inner">
+            <ul class="md-select__list">
+              
+                <li class="md-select__item">
+                  <a href="/centralized-logging-with-opensearch/en/" hreflang="en" class="md-select__link">
+                    English
+                  </a>
+                </li>
+                
+                <li class="md-select__item">
+                  <a href="/centralized-logging-with-opensearch/zh/" hreflang="zh" class="md-select__link">
+                    简体中文
+                  </a>
+                </li>
+                
+            </ul>
+          </div>
+        </div>
+      </div>
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/aws-solutions/centralized-logging-with-opensearch" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    aws-solutions/centralized-logging-with-opensearch
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link md-tabs__link--active">
+        实施指南
+      </a>
+    </li>
+  
+
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="https://github.com/orgs/aws-solutions/projects/17/" class="md-tabs__link">
+      路线图
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="https://catalog.workshops.aws/centralized-logging-with-opensearch/" class="md-tabs__link">
+      动手实验
+    </a>
+  </li>
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Centralized Logging with OpenSearch" class="md-nav__button md-logo" aria-label="Centralized Logging with OpenSearch" data-md-component="logo">
+      
+  <img src="../../../images/aws-solutions.png" alt="logo">
+
+    </a>
+    Centralized Logging with OpenSearch
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/aws-solutions/centralized-logging-with-opensearch" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    aws-solutions/centralized-logging-with-opensearch
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1">
+          实施指南
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="实施指南" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          实施指南
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_1" type="checkbox" id="__nav_1_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_1">
+          解决方案概览
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="解决方案概览" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_1">
+          <span class="md-nav__icon md-icon"></span>
+          解决方案概览
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        概览
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../solution-overview/features/" class="md-nav__link">
+        特性和收益
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../solution-overview/use-cases/" class="md-nav__link">
+        应用场景
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_2" type="checkbox" id="__nav_1_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_2">
+          架构概览
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="架构概览" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          架构概览
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        架构图
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture-overview/well-architected-pillars/" class="md-nav__link">
+        AWS Well-Architected 支柱
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_3" type="checkbox" id="__nav_1_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_3">
+          架构细节
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="架构细节" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_3">
+          <span class="md-nav__icon md-icon"></span>
+          架构细节
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture-details/solution-components/" class="md-nav__link">
+        解决方案组件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture-details/services-in-this-solution/" class="md-nav__link">
+        AWS 服务
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_4" type="checkbox" id="__nav_1_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_4">
+          计划部署
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="计划部署" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_4">
+          <span class="md-nav__icon md-icon"></span>
+          计划部署
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plan-deployment/cost/" class="md-nav__link">
+        价格
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plan-deployment/security/" class="md-nav__link">
+        安全
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plan-deployment/considerations/" class="md-nav__link">
+        支持的区域
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_5" type="checkbox" id="__nav_1_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_5">
+          开始部署
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="开始部署" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_5">
+          <span class="md-nav__icon md-icon"></span>
+          开始部署
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/" class="md-nav__link">
+        概览
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/with-cognito/" class="md-nav__link">
+        使用 Cognito User Pool
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deployment/with-oidc/" class="md-nav__link">
+        使用 OpenID Connect
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_6" type="checkbox" id="__nav_1_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_6">
+          快速入门
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="快速入门" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_6">
+          <span class="md-nav__icon md-icon"></span>
+          快速入门
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        概览
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/1.import-domain/" class="md-nav__link">
+        步骤 1. 导入 AOS 域
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/2.create-proxy/" class="md-nav__link">
+        步骤 2. 创建访问代理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/3.build-cloudtrail-pipeline/" class="md-nav__link">
+        步骤 3. 摄取 CloudTrail 日志
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/4.view-dashboard/" class="md-nav__link">
+        步骤 4. 查看仪表板
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_7" type="checkbox" id="__nav_1_7" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_7">
+          AOS 集群管理
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="AOS 集群管理" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_7">
+          <span class="md-nav__icon md-icon"></span>
+          AOS 集群管理
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../domains/" class="md-nav__link">
+        概览
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../domains/import/" class="md-nav__link">
+        集群操作
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../domains/proxy/" class="md-nav__link">
+        访问代理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../domains/alarms/" class="md-nav__link">
+        告警
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_8" type="checkbox" id="__nav_1_8" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_8">
+          AWS 服务日志
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="AWS 服务日志" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_8">
+          <span class="md-nav__icon md-icon"></span>
+          AWS 服务日志
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        概览
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cloudtrail/" class="md-nav__link">
+        Amazon CloudTrail
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s3/" class="md-nav__link">
+        Amazon S3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rds/" class="md-nav__link">
+        Amazon RDS/Aurora
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Amazon CloudFront
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Amazon CloudFront
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#amazon-opensearch" class="md-nav__link">
+    创建日志摄取（Amazon OpenSearch）
+  </a>
+  
+    <nav class="md-nav" aria-label="创建日志摄取（Amazon OpenSearch）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    使用日志通控制台
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cloudformation" class="md-nav__link">
+    使用 CloudFormation 堆栈
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    查看仪表板
+  </a>
+  
+    <nav class="md-nav" aria-label="查看仪表板">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    样品仪表板
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#light-engine" class="md-nav__link">
+    创建日志摄取（Light Engine）
+  </a>
+  
+    <nav class="md-nav" aria-label="创建日志摄取（Light Engine）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    使用日志通控制台
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cloudformation_1" class="md-nav__link">
+    使用 CloudFormation 堆栈
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    查看仪表板
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lambda/" class="md-nav__link">
+        AWS Lambda
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../elb/" class="md-nav__link">
+        Elastic Load Balancing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../waf/" class="md-nav__link">
+        AWS WAF
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vpc/" class="md-nav__link">
+        VPC Flow Log
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../config/" class="md-nav__link">
+        AWS Config
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_9" type="checkbox" id="__nav_1_9" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_9">
+          应用日志
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="应用日志" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_9">
+          <span class="md-nav__icon md-icon"></span>
+          应用日志
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../applications/" class="md-nav__link">
+        概览
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../applications/ec2-pipeline/" class="md-nav__link">
+        EC2 实例组
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../applications/eks-pipeline/" class="md-nav__link">
+        EKS 集群
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../applications/s3-pipeline/" class="md-nav__link">
+        S3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../applications/syslog-pipeline/" class="md-nav__link">
+        Syslog
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_9_6" type="checkbox" id="__nav_1_9_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_9_6">
+          管道资源
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="管道资源" data-md-level="3">
+        <label class="md-nav__title" for="__nav_1_9_6">
+          <span class="md-nav__icon md-icon"></span>
+          管道资源
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../applications/create-log-source/" class="md-nav__link">
+        日志源
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../applications/create-log-config/" class="md-nav__link">
+        日志配置
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../link-account/" class="md-nav__link">
+        跨账户日志摄取
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_11" type="checkbox" id="__nav_1_11" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_11">
+          日志管道洞察
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="日志管道洞察" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_11">
+          <span class="md-nav__icon md-icon"></span>
+          日志管道洞察
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../alarm/" class="md-nav__link">
+        告警
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../monitoring/" class="md-nav__link">
+        监控
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/" class="md-nav__link">
+        常见问题
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../trouble-shooting/" class="md-nav__link">
+        故障排查
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../uninstall/" class="md-nav__link">
+        卸载解决方案
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_15" type="checkbox" id="__nav_1_15" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_15">
+          额外资源
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="额外资源" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_15">
+          <span class="md-nav__icon md-icon"></span>
+          额外资源
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../resources/grafana/" class="md-nav__link">
+        Grafana
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../resources/open-ssl/" class="md-nav__link">
+        OpenSSL 安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../resources/upload-ssl-certificate/" class="md-nav__link">
+        上传证书
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../source/" class="md-nav__link">
+        开发者资源
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/" class="md-nav__link">
+        更新记录
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/orgs/aws-solutions/projects/17/" class="md-nav__link">
+        路线图
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://catalog.workshops.aws/centralized-logging-with-opensearch/" class="md-nav__link">
+        动手实验
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#amazon-opensearch" class="md-nav__link">
+    创建日志摄取（Amazon OpenSearch）
+  </a>
+  
+    <nav class="md-nav" aria-label="创建日志摄取（Amazon OpenSearch）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    使用日志通控制台
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cloudformation" class="md-nav__link">
+    使用 CloudFormation 堆栈
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    查看仪表板
+  </a>
+  
+    <nav class="md-nav" aria-label="查看仪表板">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    样品仪表板
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#light-engine" class="md-nav__link">
+    创建日志摄取（Light Engine）
+  </a>
+  
+    <nav class="md-nav" aria-label="创建日志摄取（Light Engine）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    使用日志通控制台
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cloudformation_1" class="md-nav__link">
+    使用 CloudFormation 堆栈
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    查看仪表板
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <a href="https://github.com/aws-solutions/centralized-logging-with-opensearch/edit/master/docs/implementation-guide/aws-services/cloudfront.md" title="编辑此页" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+<h1 id="amazon-cloudfront">Amazon CloudFront 日志</h1>
+<p><a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/AccessLogs.html">CloudFront 标准日志</a> 为每个发送到分发的请求提供详细的记录。</p>
+<p>您可以使用日志通控制台或通过部署独立的 CloudFormation 堆栈来将日志摄取到 Amazon OpenSearch Service 中。</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<ul>
+<li>CloudFront 日志存储桶必须与日志通位于同一区域。</li>
+<li>默认情况下，该解决方案将每天轮换索引。您可以在<strong>额外设置</strong>中进行调整。</li>
+</ul>
+</div>
+<h2 id="amazon-opensearch">创建日志摄取（Amazon OpenSearch）</h2>
+<h3 id="_1">使用日志通控制台</h3>
+<ol>
+<li>登录日志通控制台。</li>
+<li>在导航窗格中的 <strong>日志分析管道</strong> 下，选择 <strong>AWS 服务日志</strong>。</li>
+<li>选择<strong>创建日志摄取</strong>按钮。</li>
+<li>在 <strong>AWS 服务</strong> 部分，选择 <strong>Amazon CloudFront</strong>。</li>
+<li>选择<strong>Amazon OpenSearch</strong>，选择<strong>下一步</strong>。</li>
+<li>在 <strong>指定设置</strong> 下，为 <strong>CloudFront 日志启用</strong>选择 <strong>自动</strong> 或 <strong>手动</strong>。自动模式将自动检测 CloudFront 日志位置。<ul>
+<li>对于<strong>自动模式</strong>，从下拉列表中选择 CloudFront 分配。</li>
+<li>对于 <strong>手动模式</strong>，输入 <strong>CloudFront Distribution ID</strong> 和 <strong>CloudFront 标准日志位置</strong>。</li>
+<li>（可选步骤）如果需要跨账户摄取日志，需要先在 <strong>账户</strong> 的下拉列表中选择一个<a href="../../link-account/">链接的 AWS 账户</a>。</li>
+</ul>
+</li>
+<li>选择<strong>下一步</strong>。</li>
+<li>在 <strong>指定 OpenSearch 域</strong> 部分，为 <strong>Amazon OpenSearch 域</strong> 选择一个导入的域。</li>
+<li>如果您要摄取关联的模板化 Amazon OpenSearch Service 仪表板，请为 <strong>示例仪表板</strong> 选择 <strong>是</strong>。</li>
+<li>如果需要，您可以更改目标 Amazon OpenSearch Service 索引的 <strong>索引前缀</strong>。默认前缀是 CloudFront 分配 ID。</li>
+<li>在 <strong>日志生命周期</strong> 部分，输入管理 Amazon OpenSearch Service 索引生命周期的天数。日志通 将为此管道自动创建关联的 <a href="https://opensearch.org/docs/latest/im-plugin/ism/index/">索引状态管理 (ISM)</a> 策略。</li>
+<li>选择<strong>下一步</strong>。</li>
+<li>如果需要，添加标签。</li>
+<li>选择<strong>创建</strong>。</li>
+</ol>
+<h3 id="cloudformation">使用 CloudFormation 堆栈</h3>
+<p>此自动化 AWS CloudFormation 模板在 AWS 云中部署 <em>日志通- CloudFront 标准日志摄取</em> 解决方案。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>在 AWS 控制台中启动</th>
+<th>下载模板</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AWS 海外区域</td>
+<td><a href="https://console.aws.amazon.com/cloudformation/home#/stacks/new?templateURL=https://solutions-reference.s3.amazonaws.com/centralized-logging-with-opensearch/latest/CloudFrontLog.template" target="_blank"><img alt="启动堆栈" src="../../images/launch-stack.png" /></a></td>
+<td><a href="https://solutions-reference.s3.amazonaws.com/centralized-logging-with-opensearch/latest/CloudFrontLog.template">模板</a></td>
+</tr>
+<tr>
+<td>AWS 中国区域</td>
+<td><a href="https://console.amazonaws.cn/cloudformation/home#/stacks/new?templateURL=https://solutions-reference.s3.amazonaws.com/centralized-logging-with-opensearch/latest/CloudFrontLog.template" target="_blank"><img alt="启动堆栈" src="../../images/launch-stack.png" /></a></td>
+<td><a href="https://solutions-reference.s3.amazonaws.com/centralized-logging-with-opensearch/latest/CloudFrontLog.template">模板</a></td>
+</tr>
+</tbody>
+</table>
+<!-- BEGIN INCLUDE include-cfn-plugins-common.md -->
+<ol>
+<li>
+<p>登录 AWS 管理控制台并选择以上按钮以启动 AWS CloudFormation 模板。您还可以下载模板开始部署。</p>
+</li>
+<li>
+<p>要在不同的 AWS 区域中启动堆栈，请使用控制台导航栏中的区域选择器。</p>
+</li>
+<li>
+<p>在 <strong>创建堆栈</strong> 页面上，验证正确的模板 URL 显示在 <strong>Amazon S3 URL</strong> 文本框中，然后选择 <strong>下一步</strong>。</p>
+</li>
+<li>
+<p>在 <strong>指定堆栈详细信息</strong> 页面上，为您的解决方案堆栈分配一个名称。</p>
+</li>
+<li>
+<p>在 <strong>参数</strong> 下，查看模板的参数并根据需要进行修改。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>默认</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Log Bucket Name</td>
+<td><code>&lt;需要输入&gt;</code></td>
+<td>存储日志的 S3 存储桶名称。</td>
+</tr>
+<tr>
+<td>Log Bucket Prefix</td>
+<td><code>&lt;需要输入&gt;</code></td>
+<td>存储日志的 S3 存储桶路径前缀。</td>
+</tr>
+<tr>
+<td>Log Source Account ID</td>
+<td><code>&lt;可选输入&gt;</code></td>
+<td>存储日志的 S3 存储桶所在账户 ID. 对于跨账户日志摄取是必填 (需要先 <a href="../../link-account/">添加一个成员账户</a>). 默认情况下, 会使用您在 <strong>步骤 1</strong> 中登录的账户 ID。</td>
+</tr>
+<tr>
+<td>Log Source Region</td>
+<td><code>&lt;可选输入&gt;</code></td>
+<td>存储日志的 S3 存储桶所在的区域. 默认情况下, 会使用您在 <strong>步骤 2</strong> 中指定的区域。</td>
+</tr>
+<tr>
+<td>Log Source Account Assume Role</td>
+<td><code>&lt;可选输入&gt;</code></td>
+<td>跨账户日志摄取所需要使用的 IAM Role. 对于跨账户日志摄取是必填 (需要先 <a href="../../link-account/">添加一个成员账户</a>)。</td>
+</tr>
+<tr>
+<td>Engine Type</td>
+<td>OpenSearch</td>
+<td>OpenSearch 的引擎类型。选择 OpenSearch 或 Elasticsearch。</td>
+</tr>
+<tr>
+<td>OpenSearch Domain Name</td>
+<td><code>&lt;需要输入&gt;</code></td>
+<td>Amazon OpenSearch 集群的域名。</td>
+</tr>
+<tr>
+<td>OpenSearch Endpoint</td>
+<td><code>&lt;需要输入&gt;</code></td>
+<td>OpenSearch 端点 URL。例如，<code>vpc-your_opensearch_domain_name-xcvgw6uu2o6zafsiefxubwuohe.us-east-1.es.amazonaws.com</code>。</td>
+</tr>
+<tr>
+<td>Index Prefix</td>
+<td><code>&lt;需要输入&gt;</code></td>
+<td>日志的 OpenSearch 索引的公共前缀。索引名称将为 <code>&lt;Index Prefix&gt;-&lt;Log Type&gt;-&lt;Other Suffix&gt;</code>。</td>
+</tr>
+<tr>
+<td>Create Sample Dashboard</td>
+<td>Yes</td>
+<td>是否创建示例 OpenSearch 仪表板。</td>
+</tr>
+<tr>
+<td>VPC ID</td>
+<td><code>&lt;需要输入&gt;</code></td>
+<td>选择可以访问 OpenSearch 域的 VPC。日志处理 Lambda 将驻留在选定的 VPC 中。</td>
+</tr>
+<tr>
+<td>Subnet IDs</td>
+<td><code>&lt;需要输入&gt;</code></td>
+<td>选择至少两个可以访问 OpenSearch 域的子网。日志处理 Lambda 将驻留在子网中。确保子网可以访问 Amazon S3 服务。</td>
+</tr>
+<tr>
+<td>Security Group ID</td>
+<td><code>&lt;需要输入&gt;</code></td>
+<td>选择将与日志处理 Lambda 关联的安全组。确保安全组有权访问 OpenSearch 域。</td>
+</tr>
+<tr>
+<td>S3 Backup Bucket</td>
+<td><code>&lt;需要输入&gt;</code></td>
+<td>用于存储失败提取日志的 S3 备份存储桶名称。</td>
+</tr>
+<tr>
+<td>KMS-CMK ARN</td>
+<td><code>&lt;可选输入&gt;</code></td>
+<td>用于加密的 KMS-CMK ARN. 留空以创建新的 KMS CMK.</td>
+</tr>
+<tr>
+<td>Number Of Shards</td>
+<td>5</td>
+<td>将索引均匀分布在所有数据节点上的分片数。将每个分片的大小保持在 10-50 GiB 之间。</td>
+</tr>
+<tr>
+<td>Number of Replicas</td>
+<td>1</td>
+<td>OpenSearch 索引的副本数。每个副本都是索引的完整副本。</td>
+</tr>
+<tr>
+<td>Age to Warm Storage</td>
+<td><code>&lt;可选输入&gt;</code></td>
+<td>将索引移至温存储所需的时间（例如 7d）。索引时间是从创建到现在之间的时间。支持的单位是 d（天）和 h（小时）。仅当OpenSearch 中启用了温存储时才生效。</td>
+</tr>
+<tr>
+<td>Age to Cold Storage</td>
+<td><code>&lt;可选输入&gt;</code></td>
+<td>将索引移入冷存储所需的时间（例如 30d）。索引时间是从创建到现在之间的时间。支持的单位是 d（天）和 h（小时）。仅当 OpenSearch 中启用了冷存储时才生效。</td>
+</tr>
+<tr>
+<td>Age to Retain</td>
+<td><code>&lt;可选输入&gt;</code></td>
+<td>保留索引的时间（例如 180d）。索引时间是从创建到现在之间的时间。支持的单位是 d（天）和 h（小时）。如果值为空，则不会删除该索引。</td>
+</tr>
+<tr>
+<td>Rollover Index Size</td>
+<td><code>&lt;可选输入&gt;</code></td>
+<td>索引滚动所需的分片大小（例如 30GB）。</td>
+</tr>
+<tr>
+<td>Index Suffix</td>
+<td>yyyy-MM-dd</td>
+<td>索引后缀格式（例如：yyyy-MM-dd、yyyy-MM-dd-HH）。索引名称将为 <code>&lt;Index Prefix&gt;-&lt;Log Type&gt;-&lt;Index Suffix&gt;-000001</code>。</td>
+</tr>
+<tr>
+<td>Compression type</td>
+<td>best_compression</td>
+<td>用于压缩存储数据的压缩类型。 可用值为 best_compression 和 default。</td>
+</tr>
+<tr>
+<td>Refresh Interval</td>
+<td>1s</td>
+<td>索引多久刷新，即刷新索引最近的更改数据并使它们可用于搜索。 可以设置为 -1 以禁用刷新。 默认为 1秒。</td>
+</tr>
+<tr>
+<td>Plugins</td>
+<td><code>&lt;可选输入&gt;</code></td>
+<td>用逗号分隔的插件列表，如果无需使用插件，请留空。 合法输入为 <code>user_agent</code>， <code>geo_ip</code>。</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>选择<strong>下一步</strong>。</p>
+</li>
+<li>
+<p>在 <strong>配置堆栈选项</strong> 页面上，选择 <strong>下一步</strong>。</p>
+</li>
+<li>
+<p>在 <strong>审核</strong> 页面上，查看并确认设置。选中确认模板创建 AWS Identity and Access Management (IAM) 资源的复选框。</p>
+</li>
+<li>
+<p>选择 <strong>创建堆栈</strong> 部署堆栈。</p>
+</li>
+</ol>
+<p>您可以在 AWS CloudFormation 控制台的 <strong>状态</strong> 列中查看堆栈的状态。正常情况下，您大约 10 分钟后会看到 <strong>CREATE_COMPLETE</strong> 状态。</p>
+<!-- END INCLUDE -->
+
+<h3 id="_2">查看仪表板</h3>
+<p>仪表板包括以下可视化。</p>
+<table>
+<thead>
+<tr>
+<th>Visualization Name</th>
+<th>Source Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Total Requests</td>
+<td><ul><li> log event </li></ul></td>
+<td>显示 Amazon CloudFront 接收的总观众请求次数，包括所有 HTTP 方法以及 HTTP 和 HTTPS 请求。</td>
+</tr>
+<tr>
+<td>Edge Locations</td>
+<td><ul><li> x-edge-location </li></ul></td>
+<td>显示代表 CloudFront 边缘服务器位置比例的饼图。</td>
+</tr>
+<tr>
+<td>Request History</td>
+<td><ul><li> log event </li></ul></td>
+<td>展示一个显示事件分布的柱状图。</td>
+</tr>
+<tr>
+<td>Unique Visitors</td>
+<td><ul><li> c-ip </li></ul></td>
+<td>显示由客户端 IP 地址识别的唯一访客。</td>
+</tr>
+<tr>
+<td>Cache Hit Rate</td>
+<td><ul><li> sc-bytes </li></ul></td>
+<td>显示从 CloudFront 缓存直接为您的观众请求提供内容的比例，而不是去原始服务器获取内容。</td>
+</tr>
+<tr>
+<td>Result Type</td>
+<td><ul><li> x-edge-response-result-type </li></ul></td>
+<td>显示对所选 CloudFront 分发的命中、未命中和错误的百分比：<ul><li>Hit - 来自 CloudFront 边缘缓存的对象的观众请求。在访问日志中，这些是 x-edge-response-result-type 值为 Hit 的请求。</li><li>Miss - 对象不在边缘缓存中的观众请求，所以 CloudFront 必须从您的源获取对象。在访问日志中，这些是 x-edge-response-result-type 值为 Miss 的请求。</li><li>Error - 导致错误的观众请求，所以 CloudFront 没有提供对象。在访问日志中，这些是 x-edge-response-result-type 值为 Error、LimitExceeded 或 CapacityExceeded 的请求。</li></ul> 图表不包括刷新命中-在边缘缓存中但已过期的对象的请求。在访问日志中，刷新命中是 x-edge-response-result-type 值为 RefreshHit 的请求。</td>
+</tr>
+<tr>
+<td>Top Miss URI</td>
+<td><ul><li> cs-uri-stem</li> <li> cs-method </li>  </ul></td>
+<td>显示不在缓存中的前 10 个请求对象。</td>
+</tr>
+<tr>
+<td>Bandwidth</td>
+<td><ul><li> cs-bytes</li><li> sc-bytes</li></ul></td>
+<td>提供来自 CloudFront 边缘位置的数据传输活动的洞察。</td>
+</tr>
+<tr>
+<td>Bandwidth History</td>
+<td><ul><li> cs-bytes</li><li> sc-bytes </li></ul></td>
+<td>显示来自 CloudFront 边缘位置的数据传输活动的历史趋势。</td>
+</tr>
+<tr>
+<td>Top Client IPs</td>
+<td><ul><li> c-ip</li></ul></td>
+<td>提供访问您的 Amazon CloudFront 的前 10 个 IP 地址。</td>
+</tr>
+<tr>
+<td>Status Code Count</td>
+<td><ul><li> sc-status</li></ul></td>
+<td>显示按 HTTP 状态代码（例如 200、404、403 等）分组的对 Amazon CloudFront 的请求计数。</td>
+</tr>
+<tr>
+<td>Status History</td>
+<td><ul><li> @timestamp</li><li>sc-status </li></ul></td>
+<td>显示 Amazon CloudFront 在特定时间段返回的 HTTP 状态代码的历史趋势。</td>
+</tr>
+<tr>
+<td>Status Code</td>
+<td><ul><li> sc-status</li></ul></td>
+<td>标识对 EC2 资源进行更改的用户或 IAM 角色，协助追踪和修改的责任。</td>
+</tr>
+<tr>
+<td>Average Time Taken</td>
+<td><ul><li> time-taken</li></ul></td>
+<td>此可视化计算并显示 Amazon CloudFront 中各种操作的平均时间（例如 GET、PUT 请求的平均时间等）。</td>
+</tr>
+<tr>
+<td>Average Time History</td>
+<td><ul><li>time-taken</li><li>time-to-first-byte</li><li>@timestamp</li></ul></td>
+<td>显示 Amazon CloudFront 中各种操作的平均时间的历史趋势。</td>
+</tr>
+<tr>
+<td>Http Method</td>
+<td><ul><li> cs-method</li></ul></td>
+<td>使用饼图显示按 http 请求方法名称（例如 POST、GET、HEAD 等）分组的对 Amazon CloudFront 的请求计数。</td>
+</tr>
+<tr>
+<td>Average Time To First Byte</td>
+<td><ul><li> time-to-first-byte</li></ul></td>
+<td>提供原始服务器响应第一个字节的响应所需的平均时间。</td>
+</tr>
+<tr>
+<td>Top Request URIs</td>
+<td><ul><li> cs-uri-stem</li><li>cs-method</li></ul></td>
+<td>提供访问您的 CloudFront 的前 10 个请求 URIs。</td>
+</tr>
+<tr>
+<td>Top User Agents</td>
+<td><ul><li> cs-user-agent</li></ul></td>
+<td>提供访问您的 CloudFront 的前 10 个用户代理。</td>
+</tr>
+<tr>
+<td>Edge Location Heatmap</td>
+<td><ul><li> x-edge-location</li><li>x-edge-result-type</li></ul></td>
+<td>显示代表每个边缘位置的结果类型的热图。</td>
+</tr>
+<tr>
+<td>Top Referers</td>
+<td><ul><li> cs-referer</li></ul></td>
+<td>与 Amazon CloudFront 访问的前 10 个引荐者。</td>
+</tr>
+<tr>
+<td>Top Countries or Regions</td>
+<td><ul><li> c_country</li></ul></td>
+<td>与 Amazon CloudFront 访问的前 10 个国家。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="_3">样品仪表板</h4>
+<h2 id="light-engine">创建日志摄取（Light Engine）</h2>
+<h3 id="_4">使用日志通控制台</h3>
+<ol>
+<li>登录日志通控制台。</li>
+<li>在导航窗格中的 <strong>日志分析管道</strong> 下，选择 <strong>AWS 服务日志</strong>。</li>
+<li>选择<strong>创建日志摄取</strong>按钮。</li>
+<li>在 <strong>AWS 服务</strong> 部分，选择 <strong>Amazon CloudFront</strong>。</li>
+<li>选择<strong>Light Engine</strong>， 选择<strong>下一步</strong>。</li>
+<li>在 <strong>指定设置</strong> 下，为 <strong>CloudFront 日志启用</strong>选择 <strong>自动</strong> 或 <strong>手动</strong>。自动模式将自动检测 CloudFront 日志位置。<ul>
+<li>对于<strong>自动模式</strong>，从下拉列表中选择 CloudFront 分配。</li>
+<li>对于 <strong>手动模式</strong>，输入 <strong>CloudFront Distribution ID</strong> 和 <strong>CloudFront 标准日志位置</strong>。</li>
+<li>（可选步骤）如果需要跨账户摄取日志，需要先在 <strong>账户</strong> 的下拉列表中选择一个<a href="../../link-account/">链接的 AWS 账户</a>。</li>
+</ul>
+</li>
+<li>选择<strong>下一步</strong>。</li>
+<li>在<strong>日志处理</strong>中丰富的字段，可以选择的插件有<strong>定位</strong>和<strong>操作系统/代理</strong>，开启丰富的字段会增加数据处理的延迟和加工成本，默认不开启。</li>
+<li>在 <strong>指定 Light Engine 配置</strong> 部分，如果您要摄取关联的模板化 Grafana 仪表板，请为 <strong>样例看板</strong> 选择 <strong>是</strong>。</li>
+<li>你可以选择一个Grafana，如果需要<strong>导入</strong>一个新的Grafana，可以跳转到<a href="../../resources/grafana/">Grafana</a>进行配置。</li>
+<li>选择一个S3桶存放分区后的日志。并且定义一个用于存放日志表的名称，我们已经为你预定义了一个表名，你可以根据你的业务需求进行修改。</li>
+<li>日志处理频率，默认为<strong>5</strong>分钟，最小时间处理频率为<strong>1</strong>分钟。</li>
+<li>在 <strong>日志生命周期</strong> 部分，输入管理 日志合并时间 和 日志归档时间。我们为你提供了默认值，你可以根据你的业务需求来进行调整。</li>
+<li>选择<strong>下一步</strong>。</li>
+<li>如果需要，添加标签。</li>
+<li>选择<strong>创建</strong>。</li>
+</ol>
+<h3 id="cloudformation_1">使用 CloudFormation 堆栈</h3>
+<p>此自动化 AWS CloudFormation 模板在 AWS 云中部署 <em>日志通- CloudFront 标准日志摄取</em> 解决方案。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>在 AWS 控制台中启动</th>
+<th>下载模板</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AWS 海外区域</td>
+<td><a href="https://console.aws.amazon.com/cloudformation/home#/stacks/new?templateURL=https://solutions-reference.s3.amazonaws.com/centralized-logging-with-opensearch/latest/MicroBatchAwsServicesCloudFrontPipeline.template" target="_blank"><img alt="启动堆栈" src="../../images/launch-stack.png" /></a></td>
+<td><a href="https://solutions-reference.s3.amazonaws.com/centralized-logging-with-opensearch/latest/MicroBatchAwsServicesCloudFrontPipeline.template">模板</a></td>
+</tr>
+<tr>
+<td>AWS 中国区域</td>
+<td><a href="https://console.amazonaws.cn/cloudformation/home#/stacks/new?templateURL=https://solutions-reference.s3.amazonaws.com/centralized-logging-with-opensearch/latest/MicroBatchAwsServicesCloudFrontPipeline.template" target="_blank"><img alt="启动堆栈" src="../../images/launch-stack.png" /></a></td>
+<td><a href="https://solutions-reference.s3.amazonaws.com/centralized-logging-with-opensearch/latest/MicroBatchAwsServicesCloudFrontPipeline.template">模板</a></td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>
+<p>登录 AWS 管理控制台并选择以上按钮以启动 AWS CloudFormation 模板。您还可以下载模板开始部署。</p>
+</li>
+<li>
+<p>要在不同的 AWS 区域中启动堆栈，请使用控制台导航栏中的区域选择器。</p>
+</li>
+<li>
+<p>在 <strong>创建堆栈</strong> 页面上，验证正确的模板 URL 显示在 <strong>Amazon S3 URL</strong> 文本框中，然后选择 <strong>下一步</strong>。</p>
+</li>
+<li>
+<p>在 <strong>指定堆栈详细信息</strong> 页面上，为您的解决方案堆栈分配一个名称。</p>
+</li>
+<li>
+<p>在 <strong>参数</strong> 下，查看模板的参数并根据需要进行修改。此解决方案使用以下参数。</p>
+<ul>
+<li><strong>Pipeline settings</strong> 专用参数</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>默认</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pipeline Id</td>
+<td><code>&lt;需要输入&gt;</code></td>
+<td>pipeline的唯一标识符，如果您需要创建多个ELB pipeline，将不同的CloudFront日志写入到不同的表中时，则必须保证唯一性，可以通过<a href="https://www.uuidgenerator.net/version4">uuidgenerator</a>生成唯一的。</td>
+</tr>
+<tr>
+<td>Staging Bucket Prefix</td>
+<td>AWSLogs/CloudFrontLogs</td>
+<td>日志在临时存储区的存放目录，不同pipeline要保证Prefix的唯一性且无重叠。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Destination settings</strong> 专用参数</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>默认</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Centralized Bucket Name</td>
+<td><code>&lt;需要输入&gt;</code></td>
+<td>输入centralized的s3 bucket名称，例如centralized-logging-bucket。</td>
+</tr>
+<tr>
+<td>Centralized Bucket Prefix</td>
+<td>datalake</td>
+<td>输入centralized bucket的路径前缀，默认为datalake，意味着您的数据库的location为s3://{Centralized Bucket Name}/{Centralized Bucket Prefix}/amazon_cl_centralized。</td>
+</tr>
+<tr>
+<td>Centralized Table Name</td>
+<td>CloudFront</td>
+<td>数据写入到Centralized数据库的表名称，按需定义，默认值为CloudFront。</td>
+</tr>
+<tr>
+<td>Enrichment Plugins</td>
+<td><code>&lt;可选输入&gt;</code></td>
+<td>丰富的字段，可以选择的插件有定位和操作系统/代理，开启丰富的字段会增加数据处理的延迟和加工成本，默认不开启。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Scheduler settings</strong> 专用参数</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>默认</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LogProcessor Schedule Expression</td>
+<td>rate(5 minutes)</td>
+<td>执行数据加工的任务周期表达式，默认值为每5分钟执行一次LogProcessorr，配置<a href="https://docs.aws.amazon.com/scheduler/latest/UserGuide/schedule-types.html">可参考</a>。</td>
+</tr>
+<tr>
+<td>LogMerger Schedule Expression</td>
+<td>cron(0 1 * <em> ? </em>)</td>
+<td>执行数据文件合并的任务周期表达式，默认值为每天1点执行LogMerger,配置<a href="https://docs.aws.amazon.com/scheduler/latest/UserGuide/schedule-types.html">可参考</a>。</td>
+</tr>
+<tr>
+<td>LogArchive Schedule Expression</td>
+<td>cron(0 2 * <em> ? </em>)</td>
+<td>执行数据归档的任务周期表达式，默认值为每天2点执行LogArchive，配置<a href="https://docs.aws.amazon.com/scheduler/latest/UserGuide/schedule-types.html">可参考</a>。</td>
+</tr>
+<tr>
+<td>Age to Merge</td>
+<td>7</td>
+<td>小文件保留天数，默认值为7，表示会对7天以前的日志进行小文件合并，可按需调整。</td>
+</tr>
+<tr>
+<td>Age to Archive</td>
+<td>30</td>
+<td>日志保留天数，默认值为30，表示30天以前的数据会进行归档删除，可按需调整。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Notification settings</strong> 专用参数</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>默认</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Notification Service</td>
+<td>SNS</td>
+<td>告警通知方式，如果您的主栈是使用China，则只能选择SNS方式，如果您的主栈是使用Global，则可以使用SNS或SES方式。</td>
+</tr>
+<tr>
+<td>Recipients</td>
+<td><code>&lt;需要输入&gt;</code></td>
+<td>告警通知，如果Notification Service为SNS，则此处输入SNS的Topic arn，确保有权限，如果Notification Service为SES，则此处输入邮箱地址，以逗号分隔，确保邮件地址已在SES中Verified identities，创建主stack输入的adminEmail默认会发送验证邮件。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Dashboard settings</strong> 专用参数</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>默认</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Import Dashboards</td>
+<td>FALSE</td>
+<td>是否导入Dashboard到Grafana中，默认值为false，如设置为true，则必须填写Grafana URL和Grafana Service Account Token。</td>
+</tr>
+<tr>
+<td>Grafana URL</td>
+<td><code>&lt;可选输入&gt;</code></td>
+<td>Grafana访问的URL，例如https://cloudfront-72277319.us-west-2.elb.amazonaws.com。</td>
+</tr>
+<tr>
+<td>Grafana Service Account Token</td>
+<td><code>&lt;可选输入&gt;</code></td>
+<td>Grafana Service Account Token：Grafana中创建的Service Account Token。</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>选择<strong>下一步</strong>。</p>
+</li>
+<li>
+<p>在 <strong>配置堆栈选项</strong> 页面上，选择 <strong>下一步</strong>。</p>
+</li>
+<li>
+<p>在 <strong>审核</strong> 页面上，查看并确认设置。选中确认模板创建 AWS Identity and Access Management (IAM) 资源的复选框。</p>
+</li>
+<li>
+<p>选择 <strong>创建堆栈</strong> 部署堆栈。</p>
+</li>
+</ol>
+<p>您可以在 AWS CloudFormation 控制台的 <strong>状态</strong> 列中查看堆栈的状态。正常情况下，您大约 10 分钟后会看到 <strong>CREATE_COMPLETE</strong> 状态。</p>
+<h3 id="_5">查看仪表板</h3>
+<p>该仪表板包括以下可视化图表。</p>
+<table>
+<thead>
+<tr>
+<th>Visualization Name</th>
+<th>Source Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Filters</td>
+<td>Filters</td>
+<td>可以通过查询过滤条件对以下数据进行筛选。</td>
+</tr>
+<tr>
+<td>Total Requests</td>
+<td>log event</td>
+<td>显示 Amazon CloudFront 接收的总观众请求次数，包括所有 HTTP 方法以及 HTTP 和 HTTPS 请求。</td>
+</tr>
+<tr>
+<td>Unique Vistors</td>
+<td>c-ip</td>
+<td>显示由客户端 IP 地址识别的唯一访客。</td>
+</tr>
+<tr>
+<td>Requests History</td>
+<td>log event</td>
+<td>展示一个显示事件分布的柱状图。</td>
+</tr>
+<tr>
+<td>Request By Edge Location</td>
+<td>x-edge-location</td>
+<td>显示代表 CloudFront 边缘服务器位置比例的饼图。</td>
+</tr>
+<tr>
+<td>HTTP Status Code</td>
+<td>sc-status</td>
+<td>显示按 HTTP 状态代码（例如 200、404、403 等）分组的对 Amazon CloudFront 的请求计数。</td>
+</tr>
+<tr>
+<td>Status Code History</td>
+<td>sc-status</td>
+<td>显示 Amazon CloudFront 在特定时间段返回的 HTTP 状态代码的历史趋势。</td>
+</tr>
+<tr>
+<td>Status Code Pie</td>
+<td>sc-status</td>
+<td>使用饼图表示基于不同 HTTP 状态代码的请求分布。</td>
+</tr>
+<tr>
+<td>Average Processing Time</td>
+<td>time-taken<br>time-to-first-byte</td>
+<td>此可视化计算并显示 Amazon CloudFront 中各种操作的平均时间（例如 GET、PUT 请求的平均时间等）。</td>
+</tr>
+<tr>
+<td>Avg. Processing Time History</td>
+<td>time-taken<br>time-to-first-byte</td>
+<td>显示 Amazon CloudFront 中各种操作的平均时间的历史趋势。</td>
+</tr>
+<tr>
+<td>HTTP Method</td>
+<td>cs-method</td>
+<td>使用饼图显示按 http 请求方法名称（例如 POST、GET、HEAD 等）分组的对 Amazon CloudFront 的请求计数。</td>
+</tr>
+<tr>
+<td>Total Bytes</td>
+<td>cs-bytes<br>sc-bytes</td>
+<td>提供数据传输活动的洞察，包括总字节数传输。</td>
+</tr>
+<tr>
+<td>Response Bytes History</td>
+<td>cs-bytes<br>sc-bytes</td>
+<td>显示接收字节数和发送字节数的历史趋势。</td>
+</tr>
+<tr>
+<td>Edge Response Type</td>
+<td>x-edge-response-result-type</td>
+<td>显示对所选 CloudFront 分发的命中、未命中和错误的百分比：<br>Hit - 来自 CloudFront 边缘缓存的对象的观众请求。在访问日志中，这些是 x-edge-response-result-type 值为 Hit 的请求。<br>Miss - 对象不在边缘缓存中的观众请求，所以 CloudFront 必须从您的源获取对象。在访问日志中，这些是 x-edge-response-result-type 值为 Miss 的请求。<br>Error - 导致错误的观众请求，所以 CloudFront 没有提供对象。在访问日志中，这些是 x-edge-response-result-type 值为 Error、LimitExceeded 或 CapacityExceeded 的请求。<br>图表不包括刷新命中-在边缘缓存中但已过期的对象的请求。在访问日志中，刷新命中是 x-edge-response-result-type 值为 RefreshHit 的请求。</td>
+</tr>
+<tr>
+<td>Requests / Origin Requests</td>
+<td>log event</td>
+<td>显示对 CloudFront 发出的请求次数和回源的请求次数。</td>
+</tr>
+<tr>
+<td>Requests / Origin Requests Latency</td>
+<td>log event<br>time-taken</td>
+<td>显示从客户端到 CloudFront 的请求时延和回源请求时延。</td>
+</tr>
+<tr>
+<td>Top 20 URLs with most requests</td>
+<td>log event</td>
+<td>根据请求数量统计的前 20 个 URL。</td>
+</tr>
+<tr>
+<td>Requests 3xx / 4xx / 5xx error rate</td>
+<td>log event<br>sc-status</td>
+<td>显示从客户端到 CloudFront 的 3xx/4xx/5xx 状态码比例。</td>
+</tr>
+<tr>
+<td>Origin Requests 3xx / 4xx / 5xx error rate</td>
+<td>log eventsc-status</td>
+<td>显示从 CloudFront 到源的 3xx/4xx/5xx 状态码比例。</td>
+</tr>
+<tr>
+<td>Top Referring Domains</td>
+<td>cs(Referer)</td>
+<td>根据请求中的 Referer 标头统计的前 20 个域名。</td>
+</tr>
+<tr>
+<td>Top User Agents</td>
+<td>cs(User-Agent)</td>
+<td>根据请求中的 User-Agent 标头统计的前 20 个用户代理。</td>
+</tr>
+<tr>
+<td>Viewer Country</td>
+<td>x-edge-location<br>clientCountry<br>x-countryname</td>
+<td>使用地图显示观众国家/地区的分布。</td>
+</tr>
+<tr>
+<td>Viewer City</td>
+<td>x-edge-location<br>clientCountry<br>clientCity</td>
+<td>使用地图显示观众城市的分布。</td>
+</tr>
+<tr>
+<td>SSL Protocol Version</td>
+<td>ssl-protocol</td>
+<td>显示使用的 SSL 协议版本的比例。</td>
+</tr>
+<tr>
+<td>SSL Cipher Suite</td>
+<td>ssl-cipher</td>
+<td>显示使用的 SSL 密码套件的比例。</td>
+</tr>
+<tr>
+<td>SSL Handshake Time</td>
+<td>ssl-handshake-time</td>
+<td>显示 SSL 握手时间的分布。</td>
+</tr>
+<tr>
+<td>SSL Handshake Time History</td>
+<td>ssl-handshake-time</td>
+<td>显示 SSL 握手时间的历史趋势。</td>
+</tr>
+<tr>
+<td>SSL Handshake Failures</td>
+<td>ssl-handshake-failures</td>
+<td>显示 SSL 握手失败的次数。</td>
+</tr>
+<tr>
+<td>SSL Handshake Failures History</td>
+<td>ssl-handshake-failures</td>
+<td>显示 SSL 握手失败的历史趋势。</td>
+</tr>
+<tr>
+<td>Cache Hit Rate</td>
+<td>x-edge-response-result-type</td>
+<td>显示 CloudFront 边缘缓存命中的比例。</td>
+</tr>
+<tr>
+<td>Cache Hit Rate History</td>
+<td>x-edge-response-result-type</td>
+<td>显示 CloudFront 边缘缓存命中率的历史趋势。</td>
+</tr>
+<tr>
+<td>Cache Hit Rate by File Extension</td>
+<td>x-edge-response-result-type<br>cs-uri-extension</td>
+<td>显示不同文件扩展名的边缘缓存命中率。</td>
+</tr>
+<tr>
+<td>Cache Hit Rate by Content Type</td>
+<td>x-edge-response-result-type<br>cs(Content-Type)</td>
+<td>显示不同内容类型的边缘缓存命中率。</td>
+</tr>
+<tr>
+<td>Cache Hit Rate by HTTP Method</td>
+<td>x-edge-response-result-type<br>cs-method</td>
+<td>显示不同 HTTP 方法的边缘缓存命中率。</td>
+</tr>
+<tr>
+<td>Cache Hit Rate by HTTP Status Code</td>
+<td>x-edge-response-result-type<br>sc-status</td>
+<td>显示不同 HTTP 状态码的边缘缓存命中率。</td>
+</tr>
+<tr>
+<td>Cache Hit Rate by Query String</td>
+<td>x-edge-response-result-type<br>cs-uri-query</td>
+<td>显示带有不同查询字符串的边缘缓存命中率。</td>
+</tr>
+<tr>
+<td>Cache Hit Rate by Host Header</td>
+<td>x-edge-response-result-type<br>cs(Host)</td>
+<td>显示不同主机头的边缘缓存命中率。</td>
+</tr>
+<tr>
+<td>Cache Hit Rate by Referer Header</td>
+<td>x-edge-response-result-type<br>cs(Referer)</td>
+<td>显示不同 Referer 头的边缘缓存命中率。</td>
+</tr>
+<tr>
+<td>Cache Hit Rate by User Agent Header</td>
+<td>x-edge-response-result-type<br>cs(User-Agent)</td>
+<td>显示不同 User-Agent 头的边缘缓存命中率。</td>
+</tr>
+<tr>
+<td>Cache Hit Rate by Cookie Header</td>
+<td>x-edge-response-result-type<br>cs(Cookie)</td>
+<td>显示不同 Cookie 头的边缘缓存命中率。</td>
+</tr>
+<tr>
+<td>Cache Hit Rate by Accept-Encoding Header</td>
+<td>x-edge-response-result-type<br>cs(Accept-Encoding)</td>
+<td>显示不同 Accept-Encoding 头的边缘缓存命中率。</td>
+</tr>
+<tr>
+<td>Cache Hit Rate by Content Encoding</td>
+<td>x-edge-response-result-type<br>cs(Content-Encoding)</td>
+<td>显示不同内容编码的边缘缓存命中率。</td>
+</tr>
+<tr>
+<td>Cache Hit Rate by Vary Header</td>
+<td>x-edge-response-result-type<br>cs(Vary)</td>
+<td>显示不同 Vary 头的边缘</td>
+</tr>
+</tbody>
+</table>
+<p><a href="../../images/dashboards/cloudfront-db.png"><img alt="cloudfront-db" src="../../images/dashboards/cloudfront-db.png" /></a></p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="页脚" >
+      
+        
+        <a href="../rds/" class="md-footer__link md-footer__link--prev" aria-label="上一页: Amazon RDS/Aurora" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                上一页
+              </span>
+              Amazon RDS/Aurora
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../lambda/" class="md-footer__link md-footer__link--next" aria-label="下一页: AWS Lambda" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                下一页
+              </span>
+              AWS Lambda
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs"], "search": "../../../assets/javascripts/workers/search.5bf1dace.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\s\\-\uff0c\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version.title": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": "latest"}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.37e9125f.min.js"></script>
+      
+    
+  </body>
+</html>

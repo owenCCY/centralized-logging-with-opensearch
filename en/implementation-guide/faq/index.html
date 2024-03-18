@@ -1,0 +1,1821 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://aws-solutions.github.io/centralized-logging-with-opensearch/implementation-guide/faq/">
+      
+      <link rel="icon" href="../../images/aws-solutions.png">
+      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-8.5.3">
+    
+    
+      
+        <title>FAQ - Centralized Logging with OpenSearch</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.7a952b86.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.cbb835fc.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#frequently-asked-questions" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Centralized Logging with OpenSearch" class="md-header__button md-logo" aria-label="Centralized Logging with OpenSearch" data-md-component="logo">
+      
+  <img src="../../images/aws-solutions.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Centralized Logging with OpenSearch
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              FAQ
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <div class="md-header__option">
+        <div class="md-select">
+          
+          <button class="md-header__button md-icon" aria-label="Select language">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.52 17.52 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04M18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12m-2.62 7 1.62-4.33L19.12 17h-3.24Z"/></svg>
+          </button>
+          <div class="md-select__inner">
+            <ul class="md-select__list">
+              
+                <li class="md-select__item">
+                  <a href="/centralized-logging-with-opensearch/en/" hreflang="en" class="md-select__link">
+                    English
+                  </a>
+                </li>
+                
+                <li class="md-select__item">
+                  <a href="/centralized-logging-with-opensearch/zh/" hreflang="zh" class="md-select__link">
+                    简体中文
+                  </a>
+                </li>
+                
+            </ul>
+          </div>
+        </div>
+      </div>
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/aws-solutions/centralized-logging-with-opensearch" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    aws-solutions/centralized-logging-with-opensearch
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link md-tabs__link--active">
+        Implementation Guide
+      </a>
+    </li>
+  
+
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="https://github.com/orgs/aws-solutions/projects/17/" class="md-tabs__link">
+      Roadmap
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="https://catalog.workshops.aws/centralized-logging-with-opensearch/" class="md-tabs__link">
+      Workshop
+    </a>
+  </li>
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Centralized Logging with OpenSearch" class="md-nav__button md-logo" aria-label="Centralized Logging with OpenSearch" data-md-component="logo">
+      
+  <img src="../../images/aws-solutions.png" alt="logo">
+
+    </a>
+    Centralized Logging with OpenSearch
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/aws-solutions/centralized-logging-with-opensearch" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    aws-solutions/centralized-logging-with-opensearch
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1">
+          Implementation Guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Implementation Guide" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Implementation Guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_1" type="checkbox" id="__nav_1_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_1">
+          Solution overview
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Solution overview" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_1">
+          <span class="md-nav__icon md-icon"></span>
+          Solution overview
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../solution-overview/features/" class="md-nav__link">
+        Features and benefits
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../solution-overview/use-cases/" class="md-nav__link">
+        Use cases
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_2" type="checkbox" id="__nav_1_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_2">
+          Architecture overview
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Architecture overview" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Architecture overview
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        Architecture diagram
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture-overview/well-architected-pillars/" class="md-nav__link">
+        AWS Well-Architected pillars
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_3" type="checkbox" id="__nav_1_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_3">
+          Architecture details
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Architecture details" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_3">
+          <span class="md-nav__icon md-icon"></span>
+          Architecture details
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture-details/solution-components/" class="md-nav__link">
+        Solution components
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture-details/services-in-this-solution/" class="md-nav__link">
+        AWS services in this solution
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_4" type="checkbox" id="__nav_1_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_4">
+          Plan your deployment
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Plan your deployment" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_4">
+          <span class="md-nav__icon md-icon"></span>
+          Plan your deployment
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plan-deployment/cost/" class="md-nav__link">
+        Cost
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plan-deployment/security/" class="md-nav__link">
+        Security
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plan-deployment/considerations/" class="md-nav__link">
+        Supported AWS Regions
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_5" type="checkbox" id="__nav_1_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_5">
+          Deployment
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Deployment" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_5">
+          <span class="md-nav__icon md-icon"></span>
+          Deployment
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/with-cognito/" class="md-nav__link">
+        Launch with Cognito User Pool
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/with-oidc/" class="md-nav__link">
+        Launch with OpenID Connect
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_6" type="checkbox" id="__nav_1_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_6">
+          Getting started
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Getting started" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_6">
+          <span class="md-nav__icon md-icon"></span>
+          Getting started
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/1.import-domain/" class="md-nav__link">
+        Step 1. Import domain
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/2.create-proxy/" class="md-nav__link">
+        Step 2. Create proxy
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/3.build-cloudtrail-pipeline/" class="md-nav__link">
+        Step 3. Ingest CloudTrail logs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/4.view-dashboard/" class="md-nav__link">
+        Step 4. Access dashboard
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_7" type="checkbox" id="__nav_1_7" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_7">
+          Domain management
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Domain management" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_7">
+          <span class="md-nav__icon md-icon"></span>
+          Domain management
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../domains/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../domains/import/" class="md-nav__link">
+        Domain operations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../domains/proxy/" class="md-nav__link">
+        Access proxy
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../domains/alarms/" class="md-nav__link">
+        Domain alarms
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_8" type="checkbox" id="__nav_1_8" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_8">
+          AWS Services logs
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="AWS Services logs" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_8">
+          <span class="md-nav__icon md-icon"></span>
+          AWS Services logs
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aws-services/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aws-services/cloudtrail/" class="md-nav__link">
+        Amazon CloudTrail
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aws-services/s3/" class="md-nav__link">
+        Amazon S3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aws-services/rds/" class="md-nav__link">
+        Amazon RDS/Aurora
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aws-services/cloudfront/" class="md-nav__link">
+        Amazon CloudFront
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aws-services/lambda/" class="md-nav__link">
+        AWS Lambda
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aws-services/elb/" class="md-nav__link">
+        Elastic Load Balancing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aws-services/waf/" class="md-nav__link">
+        AWS WAF
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aws-services/vpc/" class="md-nav__link">
+        VPC Flow Log
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aws-services/config/" class="md-nav__link">
+        AWS Config
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_9" type="checkbox" id="__nav_1_9" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_9">
+          Applications logs
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Applications logs" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_9">
+          <span class="md-nav__icon md-icon"></span>
+          Applications logs
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../applications/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../applications/ec2-pipeline/" class="md-nav__link">
+        EC2 instance group
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../applications/eks-pipeline/" class="md-nav__link">
+        EKS cluster
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../applications/s3-pipeline/" class="md-nav__link">
+        S3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../applications/syslog-pipeline/" class="md-nav__link">
+        Syslog
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_9_6" type="checkbox" id="__nav_1_9_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_9_6">
+          Pipeline resources
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Pipeline resources" data-md-level="3">
+        <label class="md-nav__title" for="__nav_1_9_6">
+          <span class="md-nav__icon md-icon"></span>
+          Pipeline resources
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../applications/create-log-source/" class="md-nav__link">
+        Log source
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../applications/create-log-config/" class="md-nav__link">
+        Log Config
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../link-account/" class="md-nav__link">
+        Cross-account ingestion
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_11" type="checkbox" id="__nav_1_11" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_11">
+          Log pipeline insight
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Log pipeline insight" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_11">
+          <span class="md-nav__icon md-icon"></span>
+          Log pipeline insight
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../alarm/" class="md-nav__link">
+        Log alarms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../monitoring/" class="md-nav__link">
+        Monitoring
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          FAQ
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        FAQ
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#general" class="md-nav__link">
+    General
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setup-and-configuration" class="md-nav__link">
+    Setup and configuration
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pricing" class="md-nav__link">
+    Pricing
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#log-ingestion" class="md-nav__link">
+    Log Ingestion
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#log-visualization" class="md-nav__link">
+    Log Visualization
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trouble-shooting/" class="md-nav__link">
+        Troubleshooting
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../uninstall/" class="md-nav__link">
+        Uninstall the solution
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_15" type="checkbox" id="__nav_1_15" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1_15">
+          Additional resources
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Additional resources" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_15">
+          <span class="md-nav__icon md-icon"></span>
+          Additional resources
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resources/grafana/" class="md-nav__link">
+        Grafana
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resources/open-ssl/" class="md-nav__link">
+        OpenSSL installation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resources/upload-ssl-certificate/" class="md-nav__link">
+        Upload certificate
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/" class="md-nav__link">
+        Developer guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-notes/" class="md-nav__link">
+        Revisions
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/orgs/aws-solutions/projects/17/" class="md-nav__link">
+        Roadmap
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://catalog.workshops.aws/centralized-logging-with-opensearch/" class="md-nav__link">
+        Workshop
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#general" class="md-nav__link">
+    General
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setup-and-configuration" class="md-nav__link">
+    Setup and configuration
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pricing" class="md-nav__link">
+    Pricing
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#log-ingestion" class="md-nav__link">
+    Log Ingestion
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#log-visualization" class="md-nav__link">
+    Log Visualization
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <a href="https://github.com/aws-solutions/centralized-logging-with-opensearch/edit/master/docs/implementation-guide/faq.md" title="Edit this page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+<h1 id="frequently-asked-questions">Frequently Asked Questions</h1>
+<h2 id="general">General</h2>
+<p><strong>Q:  What is Centralized Logging with OpenSearch solution?</strong><br>
+Centralized Logging with OpenSearch is an AWS Solution that simplifies the building of log analytics pipelines. It provides
+to customers, as complementary of Amazon OpenSearch Service, capabilities to ingest and process both application logs
+and AWS service logs without writing code, and create visualization dashboards from out-of-the-box templates. Centralized Logging with OpenSearch automatically
+assembles the underlying AWS services, and provides you a web console to manage log analytics pipelines.</p>
+<p><strong>Q: What are the supported logs in this solution?</strong></br>
+Centralized Logging with OpenSearch supports both AWS service logs and EC2/EKS application logs. Refer to the <a href="../aws-services/#supported-aws-services">supported AWS services</a>,
+and the <a href="../applications/#supported-log-formats-and-sources">supported application log formats and sources</a> for more details.</p>
+<p><strong>Q: Does Centralized Logging with OpenSearch support ingesting logs from multiple AWS accounts?</strong><br>
+Yes. Centralized Logging with OpenSearch supports ingesting AWS service logs and application logs from a different AWS account
+in the same region. For more information, see <a href="../link-account/">cross-account ingestion</a>.</p>
+<p><strong>Q: Does Centralized Logging with OpenSearch support ingesting logs from multiple AWS Regions?</strong></br>
+Currently, Centralized Logging with OpenSearch does not automate the log ingestion from a different AWS Region. You need to ingest logs from other
+regions into pipelines provisioned by Centralized Logging with OpenSearch. For AWS services which store the logs in S3 bucket, you can leverage
+the <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication.html">S3 Cross-Region Replication</a>
+to copy the logs to the Centralized Logging with OpenSearch deployed region, and import incremental logs using the <a href="../aws-services/cloudfront/#using-the-centralized-logging-with-opensearch-console">manual mode</a> by specifying the
+log location in the S3 bucket. For application logs on EC2 and EKS, you need to set up the networking (for example, Kinesis VPC endpoint, VPC Peering),
+install agents, and configure the agents to ingest logs to Centralized Logging with OpenSearch pipelines.</p>
+<p><strong>Q: What is the license of this solution?</strong></br>
+This solution is provided under the <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache-2.0 license</a>. It is a permissive free
+software license written by the Apache Software Foundation. It allows users to use the software for any purpose, to distribute
+it, to modify it, and to distribute modified versions of the software under the terms of the license, without concern for royalties.</p>
+<p><strong>Q: How can I find the roadmap of this solution?</strong></br>
+This solution uses GitHub project to manage the roadmap. You can find the roadmap <a href="https://github.com/orgs/awslabs/projects/58" target="_blank">here</a>.</p>
+<p><strong>Q: How can I submit a feature request or bug report?</strong></br>
+You can submit feature requests and bug report through the GitHub issues. Here are the templates for <a href="https://github.com/aws-solutions/centralized-logging-with-opensearch/issues/new?assignees=&amp;labels=feature-request%2Cneeds-triage&amp;template=feature-request.yml&amp;title=%28module+name%29%3A+%28short+issue+description%29" target="_blank">feature request</a>, <a href="https://github.com/aws-solutions/centralized-logging-with-opensearch/issues/new?assignees=&amp;labels=bug%2Cneeds-triage&amp;template=bug-report.yml&amp;title=%28module+name%29%3A+%28short+issue+description%29" target="_blank">bug report</a>.</p>
+<p><strong>Q: How can I use stronger TLS Protocols to secure traffic, namely TLS 1.2 and above?</strong></br>
+By default, CloudFront uses the TLSv1 security policy along with a default certificate.
+Changing the TLS settings for CloudFront depends on the presence of your SSL certificates. If you don't have your own SSL certificates, you won't be able to alter the TLS setting for CloudFront.</p>
+<p>In order to configure TLS 1.2 or above, you will need a custom domain. This setup will enable you to enforce stronger TLS protocols for your traffic.</p>
+<p>To learn how to configure a custom domain and enable TLS 1.2+ for your service, you can follow the guide provided here: <a href="https://aws.amazon.com/blogs/mobile/use-a-custom-domain-with-aws-appsync-amazon-cloudfront-and-amazon-route-53/">Use a Custom Domain with AWS AppSync, Amazon CloudFront, and Amazon Route 53</a>.</p>
+<h2 id="setup-and-configuration">Setup and configuration</h2>
+<p><strong>Q: Can I deploy Centralized Logging with OpenSearch on AWS in any AWS Region?</strong></br>
+Centralized Logging with OpenSearch provides two deployment options: option 1 with Cognito User Pool, and option 2 with OpenID Connect. For
+option 1, customers can deploy the solution in AWS Regions where Amazon Cognito User Pool, AWS AppSync, Amazon Kinesis Data Firehose (optional) are available.
+For option 2, customers can deploy the solution in AWS Regions where AWS AppSync, Amazon Kinesis Data Firehose (optional) are available.
+Refer to <a href="../plan-deployment/considerations/#regional-deployments">supported regions for deployment</a> for more information.</p>
+<p><strong>Q: What are the prerequisites of deploying this solution?</strong></br>
+Centralized Logging with OpenSearch does not provision Amazon OpenSearch clusters, and you need to import existing OpenSearch clusters through the web console. The clusters
+must meet the requirements specified in <a href="../domains/import/#prerequisite">prerequisites</a>.</p>
+<p><strong>Q: Why do I need a domain name with ICP recordal when deploying the solution in AWS China Regions?</strong></br>
+The Centralized Logging with OpenSearch console is served via CloudFront distribution which is considered as an Internet information service. According
+to the local regulations, any Internet information service must bind to a domain name with <a href="https://www.amazonaws.cn/en/support/icp/?nc2=h_l2_su">ICP recordal</a>.</p>
+<p><strong>Q: What versions of OpenSearch does the solution work with?</strong></br>
+Centralized Logging with OpenSearch supports Amazon OpenSearch Service, with OpenSearch 1.3 or later.</p>
+<p><strong>Q: What are the index name rules for OpenSearch created by the Log Analytics Pipeline?</strong></br></p>
+<p>You can change the index name if needed when using the Centralized Logging with OpenSearch console to create a log analytics pipeline.</p>
+<p>If the log analytics pipeline is created for service logs, the index name is composed of <code>&lt;Index Prefix&gt;</code>-<code>&lt;service-type&gt;</code>-<code>&lt;Index Suffix&gt;</code>-&lt;00000x&gt;, where you can define a name for Index Prefix and service-type is automatically generated by the solution according to the service type you have chosen. Moreover,  you can choose different index suffix types to adjust index rollover time window.</p>
+<ul>
+<li>YYYY-MM-DD-HH: Amazon OpenSearch will roll the index by hour.</li>
+<li>YYYY-MM-DD: Amazon OpenSearch will roll the index by 24 hours.</li>
+<li>YYYY-MM: Amazon OpenSearch will roll the index by 30 days.</li>
+<li>YYYY: Amazon OpenSearch will roll the index by 365 days.</li>
+</ul>
+<p>It should be noted that in OpenSearch, the time is in UTC 0 time zone.</p>
+<p>Regarding the 00000x part, Amazon OpenSearch will automatically append a 6-digit suffix to the index name, where the first index rule is 000001, rollover according to the index, and increment backwards, such as 000002, 000003.</p>
+<p>If the log analytics pipeline is created for application log, the index name is composed of <code>&lt;Index Prefix&gt;</code>-<code>&lt;Index Suffix&gt;</code>-&lt;00000x&gt;. The rules for index prefix and index suffix, 00000x are the same as those for service logs.</p>
+<p><strong>Q: What are the index rollover rules for OpenSearch created by the Log Analytics Pipeline?</strong></br></p>
+<p>Index rollover is determined by two factors. One is the Index Suffix in the index name. If you enable the index rollover by capacity, Amazon OpenSearch will roll your index when the index capacity equals or exceeds the specified size, regardless of the rollover time window. Note that if one of these two factors matches, index rollover can be triggered.</p>
+<p>For example, we created an application log pipeline on January 1, 2023, deleted the application log pipeline at 9:00 on January 4, 2023, and the index name is nginx-YYYY-MM-DD-&lt;00000x&gt;. At the same time, we enabled the index rollover by capacity and entered 300GB. If the log data volume increases suddenly after creation, it can reach 300GB every hour, and the duration is 2 hours and 10 minutes. After that, it returns to normal, and the daily data volume is 90GB. Then OpenSearch creates three indexes on January 1, the index names are nginx-2023-01-01-000001, nginx-2023-01-01-000002, nginx-2023-01-01-000003, and then creates one every day Indexes respectively: nginx-2023-01-02-000004, nginx-2023-01-03-000005, nginx-2023-01-04-000006.</p>
+<p><strong>Q: Can I deploy the solution in an existing VPC?</strong></br>
+Yes. You can either launch the solution with a new VPC or launch the solution with an existing VPC. When using an existing
+VPC, you need to select the VPC and the corresponding subnets. Refer to <a href="../deployment/with-cognito/">launch with Cognito User Pool</a> or
+<a href="../deployment/with-oidc/">launch with OpenID Connect</a> for more details.</p>
+<p><strong>Q: I did not receive the email containing the temporary password when launching the solution with Cognito User Pool. How can I resend the password?</strong></br>
+Your account is managed by the Cognito User Pool. To resend the temporary password, you can find the user pool
+created by the solution, delete and recreate the user using the same email address. If you still have the same issue,
+try with another email address.</p>
+<p><strong>Q: How can I create more users for this solution?</strong></br>
+If you launched the solution with Cognito User Pool, go to the AWS console, find the user pool created by the solution,
+and you can create more users. If you launched the solution with OpenID Connect (OIDC), you should add more users in the
+user pool managed by the OIDC provider. Note that all users have the same privileges.</p>
+<h2 id="pricing">Pricing</h2>
+<p><strong>Q: How will I be charged and billed for the use of this solution?</strong></br>
+The solution is free to use, and you are responsible for the cost of AWS services used while running this solution.
+You pay only for what you use, and there are no minimum or setup fees. Refer to the Centralized Logging with OpenSearch <a href="../plan-deployment/cost/">Cost</a> section for detailed cost estimation.</p>
+<p><strong>Q: Will there be additional cost for cross-account ingestion?</strong></br>
+No. The cost will be same as ingesting logs within the same AWS account.</p>
+<h2 id="log-ingestion">Log Ingestion</h2>
+<p><strong>Q: What is the log agent used in the Centralized Logging with OpenSearch solution?</strong></br>
+Centralized Logging with OpenSearch uses <a href="https://github.com/aws/aws-for-fluent-bit">AWS for Fluent Bit</a>, a distribution of <a href="https://fluentbit.io/">Fluent Bit</a> maintained by AWS.
+The solution uses this distribution to ingest logs from Amazon EC2 and Amazon EKS.</p>
+<p><strong>Q: I have already stored the AWS service logs of member accounts in a centralized logging account. How should I create service log ingestion for member accounts?</strong></br>
+In this case, you need to deploy the Centralized Logging with OpenSearch solution in the centralized logging account, and ingest AWS service logs
+using the <em>Manual</em> mode from the logging account. Refer to this <a href="../aws-services/elb/">guide</a> for ingesting Application
+Load Balancer logs with <em>Manual</em> mode. You can do the same with other supported AWS services which output logs to S3.</p>
+<p><strong>Q: Why there are some duplicated records in OpenSearch when ingesting logs via Kinesis Data Streams?</strong></br>
+This is usually because there is no enough Kinesis Shards to handle the incoming requests. When threshold error occurs
+in Kinesis, the Fluent Bit agent will <a href="https://docs.fluentbit.io/manual/administration/scheduling-and-retries">retry</a>
+that <a href="https://docs.fluentbit.io/manual/administration/buffering-and-storage">chunk</a>. To avoid this issue, you need to estimate your log throughput and set a proper Kinesis shard number. Please refer to the
+<a href="https://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html">Kinesis Data Streams quotas and limits</a>.
+Centralized Logging with OpenSearch provides a built-in feature to scale-out and scale-in the Kinesis shards, and it would take a couple of minutes
+to scale out to the desired number.</p>
+<p><strong>Q: How to install log agent on CentOS 7?</strong></br></p>
+<ol>
+<li>
+<p>Log in to your CentOS 7 machine and install SSM Agent manually.</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>yum<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>amazon-ssm-agent
+sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>amazon-ssm-agent
+</code></pre></div>
+</li>
+<li>
+<p>Go to the <strong>Instance Group</strong> panel of Centralized Logging with OpenSearch console, create <strong>Instance Group</strong>, select the CentOS 7 machine, choose <strong>Install log agent</strong> and wait for its status to be <strong>offline</strong>.</p>
+</li>
+<li>
+<p>Log in to CentOS 7 and install fluent-bit 1.9.3 manually.</p>
+<p><div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">RELEASE_URL</span><span class="o">=</span><span class="si">${</span><span class="nv">FLUENT_BIT_PACKAGES_URL</span><span class="k">:-</span><span class="nv">https</span><span class="p">://packages.fluentbit.io</span><span class="si">}</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">RELEASE_KEY</span><span class="o">=</span><span class="si">${</span><span class="nv">FLUENT_BIT_PACKAGES_KEY</span><span class="k">:-</span><span class="nv">https</span><span class="p">://packages.fluentbit.io/fluentbit.key</span><span class="si">}</span>
+
+sudo<span class="w"> </span>rpm<span class="w"> </span>--import<span class="w"> </span><span class="nv">$RELEASE_KEY</span>
+cat<span class="w"> </span><span class="s">&lt;&lt; EOF | sudo tee /etc/yum.repos.d/fluent-bit.repo</span>
+<span class="s">[fluent-bit]</span>
+<span class="s">name = Fluent Bit</span>
+<span class="s">baseurl = $RELEASE_URL/centos/VERSION_ARCH_SUBSTR</span>
+<span class="s">gpgcheck=1</span>
+<span class="s">repo_gpgcheck=1</span>
+<span class="s">gpgkey=$RELEASE_KEY</span>
+<span class="s">enabled=1</span>
+<span class="s">EOF</span>
+sudo<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s|VERSION_ARCH_SUBSTR|\$releasever/\$basearch/|g&#39;</span><span class="w"> </span>/etc/yum.repos.d/fluent-bit.repo
+sudo<span class="w"> </span>yum<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>fluent-bit-1.9.3-1
+
+<span class="c1"># Modify the configuration file</span>
+sudo<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s/ExecStart.*/ExecStart=\/opt\/fluent-bit\/bin\/fluent-bit -c \/opt\/fluent-bit\/etc\/fluent-bit.conf/g&#39;</span><span class="w"> </span>/usr/lib/systemd/system/fluent-bit.service
+sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload
+sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>fluent-bit
+sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>fluent-bit
+</code></pre></div>
+4. Go back to the <strong>Instance Groups</strong> panel of the Centralized Logging with OpenSearch console and wait for the CentOS 7 machine status to be <strong>Online</strong> and proceed to create the instance group.</p>
+</li>
+</ol>
+<p><strong>Q: How can I consume CloudWatch custom logs?</strong></br>
+You can use Firehose to subscribe CloudWatch logs and transfer logs into Amazon S3. Firstly, create subscription filters with Amazon Kinesis Data Firehose based on this <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CrossAccountSubscriptions-Firehose.html">guide</a>. Next, follow the <a href="https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html">instructions</a> to learn how to transfer logs to Amazon S3. Then, you can use Centralized Logging with OpenSearch to ingest logs from Amazon S3 to OpenSearch.</p>
+<h2 id="log-visualization">Log Visualization</h2>
+<p><strong>Q: How can I find the built-in dashboards in OpenSearch?</strong></br>
+Please refer to the <a href="../aws-services/#supported-aws-services">AWS Service Logs</a> and <a href="../applications/#supported-log-formats-and-sources">Application Logs</a> to
+find out if there is a built-in dashboard supported. You also need to turn on the <em>Sample Dashboard</em> option when creating
+a log analytics pipeline. The dashboard will be inserted into the Amazon OpenSearch Service under <strong>Global Tenant</strong>. You can switch to the
+Global Tenant from the top right coder of the OpenSearch Dashboards.</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../monitoring/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Monitoring" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Monitoring
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../trouble-shooting/" class="md-footer__link md-footer__link--next" aria-label="Next: Troubleshooting" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Troubleshooting
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs"], "search": "../../assets/javascripts/workers/search.5bf1dace.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": "latest"}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.37e9125f.min.js"></script>
+      
+    
+  </body>
+</html>
