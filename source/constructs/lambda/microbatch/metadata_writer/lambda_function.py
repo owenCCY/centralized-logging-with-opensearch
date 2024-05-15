@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import json
-from utils import logger, IAMClient
-from utils.aws.commonlib import AWSConnection
+from utils.aws import IAMClient
+from utils.helpers import logger, AWSConnection
 from utils.models.meta import MetaTable
 
 

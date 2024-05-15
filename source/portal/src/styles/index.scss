@@ -97,12 +97,6 @@
 // ExpandableSection Section
 @import "../components/ExpandableSection/style";
 
-// //upload
-// @import "../components/Upload/style";
-
-// //progress
-// @import "../components/Progress/style";
-
 #root {
   white-space: pre-line;
 }
@@ -242,6 +236,10 @@
 
 .flex {
   display: flex;
+}
+
+.gap-10 {
+  gap: 10px;
 }
 
 .inline-flex {
@@ -452,23 +450,11 @@
   }
 }
 
-.lh-import-cluster {
-  .create-wrapper {
-    display: flex;
-    .create-content {
-      padding-top: 10px;
-      flex: 1;
-    }
-  }
-}
-
-.lh-create-log {
-  .create-wrapper {
-    display: flex;
-    .create-content {
-      padding-top: 10px;
-      flex: 1;
-    }
+.create-wrapper {
+  display: flex;
+  .create-content {
+    padding-top: 10px;
+    flex: 1;
   }
 }
 
@@ -625,7 +611,6 @@
   padding: 20px;
   min-height: 50px;
   font-size: 16px;
-  // max-width: 520px;
   line-height: 1.5em;
   &.alert-content {
     max-width: 620px;
@@ -666,7 +651,6 @@
       bottom: 30px;
       background-color: #ffffff;
       border: 1px solid #ccc;
-      // box-shadow: 0px 2px 2px #ccc;
       ul,
       li {
         margin: 0;
@@ -795,6 +779,7 @@
 }
 
 .select-item-status {
+  position: relative;
   font-size: 14px;
   .icon {
     position: absolute;
@@ -815,7 +800,6 @@
   .gsui-autocomplete-select input,
   .gsui-textinput input,
   .MuiSelect-select {
-    // color: $error !important;
     border: 1px solid $error !important;
     border-left: 4px solid $error !important;
   }
@@ -1078,7 +1062,6 @@
   }
   .json-name {
     padding-left: 55px;
-    // flex: 1;
     width: calc(100% - 490px);
   }
   .json-type {
@@ -1095,4 +1078,32 @@
 .json-border-bottom {
   border-bottom: 1px solid #eaeded;
   padding-top: 8px;
+}
+
+.clo-notification-bar {
+  background-color: #0073bb;
+  &-content {
+    color: #fff;
+    font-size: 14px;
+    padding: 8px 10px 8px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &-text {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+    &-button {
+      display: flex;
+      gap: 10px;
+      &-dismiss {
+        color: #fff;
+        font-size: 14px;
+        cursor: pointer;
+        border: 0;
+        background-color: transparent;
+      }
+    }
+  }
 }

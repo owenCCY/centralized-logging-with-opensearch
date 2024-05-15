@@ -14,9 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React, { useState, useEffect } from "react";
-import { LogAgentStatus, TagFilterInput } from "API";
-import { DEFAULT_AGENT_VERSION, buildSolutionDocsLink } from "assets/js/const";
-import { buildEC2LInk, formatLocalTime, ternary } from "assets/js/utils";
+import { EC2GroupPlatform, LogAgentStatus, TagFilterInput } from "API";
+import { buildSolutionDocsLink, getFLBVersionByType } from "assets/js/const";
+import {
+  buildEC2LInk,
+  defaultArray,
+  defaultStr,
+  formatLocalTime,
+  ternary,
+} from "assets/js/utils";
 import Button from "components/Button";
 import Switch from "components/Switch";
 import LoadingText from "components/LoadingText";
@@ -38,6 +44,7 @@ import cloneDeep from "lodash.clonedeep";
 import { RootState } from "reducer/reducers";
 import { defaultTo } from "lodash";
 import ButtonRefresh from "components/ButtonRefresh";
+import SelectPlatform from "./SelectPlatform";
 
 const PAGE_SIZE = 50;
 const REFRESH_INTERVAL = 180000; // 3 minutes to refresh
@@ -70,11 +77,14 @@ export type InstanceWithStatusType = Partial<InstanceItemType> &
   Partial<InstanceStatusType>;
 
 interface InstanceTableProps {
+  platform: EC2GroupPlatform;
+  changePlatform?: (platform: EC2GroupPlatform) => void;
+  disableChangePlatform?: boolean;
   isASGList?: boolean;
   defaultTagFilter?: TagFilterInput[];
   accountId: string;
-  changeInstanceSet: (instances: any) => void;
-  setCreateDisabled: (disable: boolean) => void;
+  changeInstanceSet?: (instances: any) => void;
+  setCreateDisabled?: (disable: boolean) => void;
   defaultDisabledIds?: (string | null)[];
 }
 
@@ -90,6 +100,9 @@ const InstanceTable: React.FC<InstanceTableProps> = (
     changeInstanceSet,
     setCreateDisabled,
     defaultDisabledIds,
+    platform,
+    changePlatform,
+    disableChangePlatform,
   } = props;
   const { t } = useTranslation();
   const amplifyConfig: AmplifyConfigType = useSelector(
@@ -107,7 +120,7 @@ const InstanceTable: React.FC<InstanceTableProps> = (
 
   const [loadingInstall, setLoadingInstall] = useState(false);
   const [tagFilter, setTagFilter] = useState<TagFilterInput[]>(
-    defaultTagFilter || []
+    defaultArray(defaultTagFilter, [])
   );
   const [selectInstanceList, setSelectInstanceList] = useState<
     InstanceWithStatusType[]
@@ -116,10 +129,9 @@ const InstanceTable: React.FC<InstanceTableProps> = (
   const [searchParams, setSearchParams] = useState("");
   const [hasMoreInstance, setHasMoreInstance] = useState(false);
   const [nextToken, setNextToken] = useState("");
-  const [loadmoreIsClick, setLoadmoreIsClick] = useState(false);
+  const [loadMoreIsClick, setLoadMoreIsClick] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [lastUpdateTime, setLastUpdateTime] = useState("");
-
   const [showInstanceList, setShowInstanceList] = useState<
     InstanceWithStatusType[]
   >([]);
@@ -137,7 +149,7 @@ const InstanceTable: React.FC<InstanceTableProps> = (
         setInstanceWithStatusList([]);
       },
       () => {
-        setCreateDisabled(true);
+        setCreateDisabled?.(true);
       }
     )();
     if (isLoadingMore) {
@@ -149,7 +161,7 @@ const InstanceTable: React.FC<InstanceTableProps> = (
     let instanceListNextToken = "";
     if (!refresh || isLoadingMore) {
       if (isLoadingMore) {
-        setLoadmoreIsClick(true);
+        setLoadMoreIsClick(true);
       }
       const resInstanceData = await appSyncRequestQuery(listInstances, {
         maxResults: PAGE_SIZE,
@@ -157,6 +169,7 @@ const InstanceTable: React.FC<InstanceTableProps> = (
         tags: tagFilter,
         accountId: accountId,
         region: amplifyConfig.aws_project_region,
+        platformType: platform,
       });
       const instanceRespData: ListInstanceResponse =
         resInstanceData.data.listInstances;
@@ -186,9 +199,9 @@ const InstanceTable: React.FC<InstanceTableProps> = (
       accountId: accountId,
     });
 
-    const instanceStatuResp: CommandResponse =
+    const instanceStatusResp: CommandResponse =
       statusData.data.getInstanceAgentStatus;
-    const instanceStatusList = instanceStatuResp.instanceAgentStatusList;
+    const instanceStatusList = instanceStatusResp.instanceAgentStatusList;
 
     const tmpInstanceWithStatus: InstanceWithStatusType[] = [];
 
@@ -237,7 +250,7 @@ const InstanceTable: React.FC<InstanceTableProps> = (
     setInstanceWithStatusList(tmpInstanceWithStatus);
     setLoadingData(false);
     setLoadingRefresh(false);
-    setCreateDisabled(false);
+    setCreateDisabled?.(false);
     setLoadingMore(false);
   };
 
@@ -276,10 +289,13 @@ const InstanceTable: React.FC<InstanceTableProps> = (
 
   // Get instance group list when page rendered.
   useEffect(() => {
-    setCreateDisabled(true);
+    setCreateDisabled?.(true);
     clearInterval(intervalId);
     getAllInstanceWithStatus();
-  }, [tagFilter, accountId]);
+    // reset select items
+    changeInstanceSet?.([]);
+    setSelectInstanceList([]);
+  }, [tagFilter, accountId, platform]);
 
   useEffect(() => {
     if (enableAutoRefresh) {
@@ -306,7 +322,7 @@ const InstanceTable: React.FC<InstanceTableProps> = (
     setShowInstanceList(
       cloneInstanceList
         .filter((element) => {
-          return (element?.id || "").indexOf(searchParams) >= 0;
+          return defaultStr(element?.id).indexOf(searchParams) >= 0;
         })
         .sort((a, b) =>
           (a?.name?.toLowerCase() || "") > (b?.name?.toLowerCase() || "")
@@ -322,7 +338,7 @@ const InstanceTable: React.FC<InstanceTableProps> = (
       const tmpList = JSON.parse(JSON.stringify(prev));
       const target = tmpList.find((tmp: TagFilterInput) => tmp.Key === tag.Key);
       if (target) {
-        target.Values = target.Values.concat(tag.Values || []);
+        target.Values = target.Values.concat(defaultArray(tag.Values, []));
       } else {
         tmpList.push(tag);
       }
@@ -347,7 +363,10 @@ const InstanceTable: React.FC<InstanceTableProps> = (
     return (
       <a
         target="_blank"
-        href={buildEC2LInk(amplifyConfig.aws_project_region, data.id || "")}
+        href={buildEC2LInk(
+          amplifyConfig.aws_project_region,
+          defaultStr(data.id)
+        )}
         rel="noreferrer"
       >
         {data.id}
@@ -360,7 +379,7 @@ const InstanceTable: React.FC<InstanceTableProps> = (
       if (data.status === LogAgentStatus.Installing) {
         return <Status status={LogAgentStatus.Installing} />;
       } else {
-        return DEFAULT_AGENT_VERSION;
+        return getFLBVersionByType(platform);
       }
     } else {
       return "-";
@@ -396,7 +415,7 @@ const InstanceTable: React.FC<InstanceTableProps> = (
             <div className="flex">
               <Status
                 isLink={data.status === LogAgentStatus.Offline}
-                status={data.status || ""}
+                status={defaultStr(data.status)}
               />
               {loadingRefresh && (
                 <div className="ml-5">
@@ -419,10 +438,9 @@ const InstanceTable: React.FC<InstanceTableProps> = (
           trackId="id"
           defaultDisabledIds={defaultDisabledIds}
           title={t("resource:group.comp.instances.title")}
-          // isReload={reloadTableData}
           changeSelected={(item) => {
             setSelectInstanceList(item);
-            changeInstanceSet(item);
+            changeInstanceSet?.(item);
           }}
           loading={loadingData}
           selectType={isASGList ? SelectType.NONE : SelectType.CHECKBOX}
@@ -536,15 +554,30 @@ const InstanceTable: React.FC<InstanceTableProps> = (
               <div></div>
             ) : (
               <div>
-                <TextInput
-                  value={searchParams}
-                  isSearch={true}
-                  placeholder={t("resource:group.comp.instances.filter")}
-                  onChange={(event) => {
-                    console.info("event:", event);
-                    setSearchParams(event.target.value);
-                  }}
-                />
+                <div className="flex gap-10">
+                  <div style={{ width: 150 }}>
+                    <SelectPlatform
+                      platform={platform}
+                      disableChangePlatform={
+                        disableChangePlatform ?? loadingData
+                      }
+                      changePlatform={(pf) => {
+                        changePlatform?.(pf);
+                      }}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <TextInput
+                      value={searchParams}
+                      isSearch={true}
+                      placeholder={t("resource:group.comp.instances.filter")}
+                      onChange={(event) => {
+                        console.info("event:", event);
+                        setSearchParams(event.target.value);
+                      }}
+                    />
+                  </div>
+                </div>
                 <TagFilter
                   tags={tagFilter}
                   addTag={addTag}
@@ -573,7 +606,7 @@ const InstanceTable: React.FC<InstanceTableProps> = (
           }
         />
 
-        {!hasMoreInstance && !loadingData && loadmoreIsClick && (
+        {!hasMoreInstance && !loadingData && loadMoreIsClick && (
           <div className="no-more-data">{t("noMoreInstance")}</div>
         )}
         {hasMoreInstance && (

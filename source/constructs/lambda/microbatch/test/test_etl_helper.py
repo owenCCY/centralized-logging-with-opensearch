@@ -8,7 +8,7 @@ import uuid
 import json
 import types
 import pytest
-from datetime import datetime
+import datetime
 from test.mock import mock_iam_context, mock_sqs_context, mock_ddb_context, mock_athena_context, mock_sfn_context, default_environment_variables
 
 
@@ -41,7 +41,7 @@ class TestParameter:
         assert param.task_id == ddl_create_database_execution_id
         assert param.function_name == ''
         assert param.task_token == ''
-        assert param.ddb_item['expirationTime'] > datetime.utcnow().timestamp()
+        assert param.ddb_item['expirationTime'] > datetime.datetime.now(datetime.UTC).timestamp()
         param.ddb_item.pop('expirationTime')
         assert param.ddb_item == {'executionName': '848be54a-ae2c-414c-9ae3-f0b3d11089ab', 'taskId': ddl_create_database_execution_id, 
                                   'API': 'Athena: StartQueryExecution', 'parentTaskId': '00000000-0000-0000-0000-000000000000', 
@@ -68,7 +68,7 @@ class TestParameter:
         assert param.task_id == ddl_create_database_execution_id
         assert param.function_name == function_name
         assert param.task_token == ''
-        assert param.ddb_item['expirationTime'] > datetime.utcnow().timestamp()
+        assert param.ddb_item['expirationTime'] > datetime.datetime.now(datetime.UTC).timestamp()
         param.ddb_item.pop('expirationTime')
         assert param.ddb_item == {'executionName': '848be54a-ae2c-414c-9ae3-f0b3d11089ab', 'taskId': ddl_create_database_execution_id, 
                                   'API': 'Athena: StartQueryExecution', 'parentTaskId': '00000000-0000-0000-0000-000000000000', 
@@ -100,7 +100,7 @@ class TestParameter:
             assert param.pipeline_id == "189f73eb-1808-47e4-a9db-ee9c35100abe"
             assert param.function_name == ''
             assert param.task_token == ''
-            assert param.ddb_item['expirationTime'] > datetime.utcnow().timestamp()
+            assert param.ddb_item['expirationTime'] > datetime.datetime.now(datetime.UTC).timestamp()
             param.ddb_item.pop('expirationTime')
             assert param.ddb_item == {'executionName': '848be54a-ae2c-414c-9ae3-f0b3d11089ab', 'taskId': ddl_create_database_execution_id, 
                                     'API': required_param, 'parentTaskId': '00000000-0000-0000-0000-000000000000', 
@@ -124,7 +124,7 @@ class TestParameter:
         parameter['API'] = 'do not supported API'
         with pytest.raises(Exception) as exception_info:
             Parameters(parameter)
-        assert exception_info.value.args[0] == 'Invalid API parameter, optional value: Athena: StartQueryExecution, Athena: GetQueryExecution, DynamoDB: PutItem.'
+        assert exception_info.value.args[0] == 'Invalid API parameter, optional value: Athena: StartQueryExecution, Athena: GetQueryExecution, Step Functions: ExecutionInputFormatter, DynamoDB: PutItem.'
 
         event = copy.deepcopy(etl_helper_event)
         parameter = event['CreateTmpTable']
@@ -139,7 +139,7 @@ class TestParameter:
         assert param.pipeline_id == ''
         assert param.function_name == ''
         assert param.task_token == ''
-        assert param.ddb_item['expirationTime'] > datetime.utcnow().timestamp()
+        assert param.ddb_item['expirationTime'] > datetime.datetime.now(datetime.UTC).timestamp()
         param.ddb_item.pop('expirationTime')
         assert param.ddb_item == {'executionName': '848be54a-ae2c-414c-9ae3-f0b3d11089ab', 'taskId': ddl_create_database_execution_id, 
                                   'API': 'Athena: StartQueryExecution', 'functionName': '', 'data': '', 'startTime': '', 'endTime': '', 
@@ -161,7 +161,7 @@ class TestParameter:
         assert param.pipeline_id == ''
         assert param.function_name == ''
         assert param.task_token == ''
-        assert param.ddb_item['expirationTime'] > datetime.utcnow().timestamp()
+        assert param.ddb_item['expirationTime'] > datetime.datetime.now(datetime.UTC).timestamp()
         param.ddb_item.pop('expirationTime')
         assert param.ddb_item == {'executionName': '848be54a-ae2c-414c-9ae3-f0b3d11089ab', 'taskId': ddl_create_database_execution_id, 
                                   'API': 'Athena: StartQueryExecution', 'functionName': '', 'data': '', 'startTime': '', 'endTime': '', 
@@ -174,7 +174,7 @@ class TestParameter:
         parameter['API'] = 'do not supported API'
         with pytest.raises(Exception) as exception_info:
             Parameters(parameter)
-        assert exception_info.value.args[0] == 'Invalid API parameter, optional value: Athena: StartQueryExecution, Athena: GetQueryExecution, DynamoDB: PutItem.'
+        assert exception_info.value.args[0] == 'Invalid API parameter, optional value: Athena: StartQueryExecution, Athena: GetQueryExecution, Step Functions: ExecutionInputFormatter, DynamoDB: PutItem.'
 
         event = copy.deepcopy(etl_helper_event)
         parameter = event['CreateTmpTable']
@@ -189,7 +189,7 @@ class TestParameter:
         assert param.pipeline_id == "189f73eb-1808-47e4-a9db-ee9c35100abe"
         assert param.function_name == ''
         assert param.task_token == ''
-        assert param.ddb_item['expirationTime'] > datetime.utcnow().timestamp()
+        assert param.ddb_item['expirationTime'] > datetime.datetime.now(datetime.UTC).timestamp()
         param.ddb_item.pop('expirationTime')
         assert param.ddb_item == {'executionName': '848be54a-ae2c-414c-9ae3-f0b3d11089ab', 'taskId': ddl_create_database_execution_id, 
                                 'API': 'Athena: GetQueryExecution', 'parentTaskId': '00000000-0000-0000-0000-000000000000', 
@@ -221,7 +221,7 @@ class TestParameter:
         assert param.pipeline_id == "189f73eb-1808-47e4-a9db-ee9c35100abe"
         assert param.function_name == ''
         assert param.task_token == ''
-        assert param.ddb_item['expirationTime'] > datetime.utcnow().timestamp()
+        assert param.ddb_item['expirationTime'] > datetime.datetime.now(datetime.UTC).timestamp()
         param.ddb_item.pop('expirationTime')
         assert param.ddb_item == {'executionName': '848be54a-ae2c-414c-9ae3-f0b3d11089ab', 'taskId': ddl_create_database_execution_id, 
                                 'API': 'DynamoDB: PutItem', 'parentTaskId': '00000000-0000-0000-0000-000000000000', 
@@ -240,6 +240,123 @@ class TestParameter:
                 param.output_location
         assert exception_info.value.args[0] == "'Parameters' object has no attribute 'output_location'"
         
+        event = copy.deepcopy(etl_helper_event)
+        parameter = event['CreateTmpTable']
+        parameter['API'] = "Step Functions: ExecutionInputFormatter"
+        parameter['input'] = {
+            'metadata': {
+                's3': {
+                    'archivePath': 's3://staging-bucket/archive'
+                    }, 
+                'athena': {
+                    'statements': {
+                        'create': 'create table src;',
+                        'insert': 'insert into dest select * from src;',
+                        'drop': 'drop table src',
+                        'aggregate': []
+                    }
+                }
+            }
+        }
+        param = Parameters(parameter)
+        assert param.api == "Step Functions: ExecutionInputFormatter"
+        assert param.input == parameter['input']
+        assert param.parent_task_id == "00000000-0000-0000-0000-000000000000"
+        assert param.execution_name == "848be54a-ae2c-414c-9ae3-f0b3d11089ab"
+        assert param.state_name == "Step 2.1: Create tmp table in Athena"
+        assert param.state_machine_name == "LogProcessor-HBTz7GoOjZoz"
+        assert param.task_id == ddl_create_database_execution_id
+        assert param.pipeline_id == "189f73eb-1808-47e4-a9db-ee9c35100abe"
+        assert param.function_name == ''
+        assert param.task_token == ''
+        assert param.ddb_item['expirationTime'] > datetime.datetime.now(datetime.UTC).timestamp()
+        param.ddb_item.pop('expirationTime')
+        assert param.ddb_item == {'executionName': '848be54a-ae2c-414c-9ae3-f0b3d11089ab', 'taskId': ddl_create_database_execution_id, 
+                                'API': 'Step Functions: ExecutionInputFormatter', 'parentTaskId': '00000000-0000-0000-0000-000000000000', 
+                                'pipelineId': '189f73eb-1808-47e4-a9db-ee9c35100abe', 
+                                'stateMachineName': 'LogProcessor-HBTz7GoOjZoz', 'stateName': 'Step 2.1: Create tmp table in Athena', 
+                                'functionName': '', 'data': '', 'startTime': '', 'endTime': '', 'status': '',
+                                'pipelineIndexKey': f'189f73eb-1808-47e4-a9db-ee9c35100abe:LogProcessor-HBTz7GoOjZoz:{ddl_create_database_execution_id}'
+                                }
+    
+    def test_execution_input_formatter_parameter_check(self, mock_iam_context, mock_sqs_context, mock_ddb_context, mock_athena_context):
+        from etl_helper.lambda_function import Parameters
+
+        etl_helper_event = json.loads(os.environ["ETL_LOG_WRITER_EVENT"])
+        parameter = etl_helper_event['CreateTmpTable']
+        param = Parameters(parameter)
+        
+        execution_input_formatter_event = {
+            "API": "Step Functions: ExecutionInputFormatter",
+            "executionName": str(uuid.uuid4()),
+            "taskId": str(uuid.uuid4()),
+            "extra": {
+                "parentTaskId": "00000000-0000-0000-0000-000000000000",
+                "stateName": "Step 2: Execution input formatting..",
+                "stateMachineName": "LogProcessor-HBTz7GoOjZoz",
+                "pipelineId": str(uuid.uuid4())
+            },
+            "taskToken": "",
+            "input": {}
+            }
+
+        event = copy.deepcopy(execution_input_formatter_event)
+        with pytest.raises(Exception) as exception_info:
+            param._execution_input_formatter_parameter_check(parameters=event)
+        assert exception_info.value.args[0] == 'API: "Step Functions: ExecutionInputFormatter", missing required parameter: input'
+
+        event = copy.deepcopy(execution_input_formatter_event)
+        event['input']['metadata'] = {}
+        with pytest.raises(Exception) as exception_info:
+            param._execution_input_formatter_parameter_check(parameters=event)
+        assert exception_info.value.args[0] == 'Missing value for input.metadata.s3.'
+        
+        event = copy.deepcopy(execution_input_formatter_event)
+        event['input']['metadata'] = {'s3': {'key':'value'}, 'athena': {}}
+        with pytest.raises(Exception) as exception_info:
+            param._execution_input_formatter_parameter_check(parameters=event)
+        assert exception_info.value.args[0] == 'Missing value for input.metadata.athena.'
+        
+        event = copy.deepcopy(execution_input_formatter_event)
+        event['input']['metadata'] = {'s3': {'key':'value'}, 'athena': {'key':'value'}}
+        with pytest.raises(Exception) as exception_info:
+            param._execution_input_formatter_parameter_check(parameters=event)
+        assert exception_info.value.args[0] == 'Missing value for input.metadata.s3.archivePath.'
+        
+        event = copy.deepcopy(execution_input_formatter_event)
+        event['input']['metadata'] = {
+            's3': {
+                'archivePath': 's3://staging-bucket/archive'
+                }, 
+            'athena': {
+                'statements': {
+                    'create': '',
+                    'insert': '',
+                    'drop': '',
+                    'aggregate': []
+                }
+            }
+        }
+        with pytest.raises(Exception) as exception_info:
+            param._execution_input_formatter_parameter_check(parameters=event)
+        assert exception_info.value.args[0] == 'Missing value for input.metadata.athena.statements.create.'
+        
+        event = copy.deepcopy(execution_input_formatter_event)
+        event['input']['metadata'] = {
+            's3': {
+                'archivePath': 's3://staging-bucket/archive'
+                }, 
+            'athena': {
+                'statements': {
+                    'create': 'create table src{} location{};',
+                    'insert': 'insert into dest select * {} from src{};',
+                    'drop': 'drop table src{}',
+                    'aggregate': ['insert into metrics select * from dest where __execution_name__ = {};']
+                }
+            }
+        }
+        param._execution_input_formatter_parameter_check(parameters=event)
+
 
 def mock_boto3_api_call(self, operation_name, kwarg):
     from botocore.exceptions import ClientError
@@ -361,10 +478,44 @@ def test_lambda_handler(mock_iam_context, mock_sqs_context, mock_ddb_context, mo
     assert response['pipelineId'] == "189f73eb-1808-47e4-a9db-ee9c35100abe"
     
     event = copy.deepcopy(etl_helper_event['CreateTmpTable'])
+    event['API'] = "Step Functions: ExecutionInputFormatter"
+    event['input'] = {
+        'metadata': {
+            's3': {
+                'archivePath': 's3://staging-bucket/archive'
+                }, 
+            'athena': {
+                'statements': {
+                    'create': 'create table src;',
+                    'insert': 'insert into dest select * from src;',
+                    'drop': 'drop table src',
+                    'aggregate': []
+                }
+            }
+        }
+    }
+    
+    lambda_handler(event, context)
+    
+    response = AWS_DDB_ETL_LOG.get(execution_name=execution_name, task_id=ddl_create_database_execution_id)
+    assert response['API'] == "Step Functions: ExecutionInputFormatter"
+    assert response['parentTaskId'] == "00000000-0000-0000-0000-000000000000"
+    assert response['executionName'] == execution_name
+    assert response['functionName'] == function_name
+    assert response['stateName'] == "Step 2.1: Create tmp table in Athena"
+    assert response['stateMachineName'] == "LogProcessor-HBTz7GoOjZoz"
+    assert response['taskId'] == ddl_create_database_execution_id
+    assert response['data'] == json.dumps(event['input'])
+    assert response['startTime'] is not None
+    assert response['endTime'] is not None
+    assert response['status'] == 'Succeeded'
+    assert response['pipelineId'] == "189f73eb-1808-47e4-a9db-ee9c35100abe"
+    
+    event = copy.deepcopy(etl_helper_event['CreateTmpTable'])
     event['API'] = 'do not supported API'
     with pytest.raises(Exception) as exception_info:
         lambda_handler(event, context)
-    assert exception_info.value.args[0] == 'Invalid API parameter, optional value: Athena: StartQueryExecution, Athena: GetQueryExecution, DynamoDB: PutItem.'
+    assert exception_info.value.args[0] == 'Invalid API parameter, optional value: Athena: StartQueryExecution, Athena: GetQueryExecution, Step Functions: ExecutionInputFormatter, DynamoDB: PutItem.'
 
     event = "test event is a string"
     with pytest.raises(Exception) as exception_info:
@@ -506,5 +657,40 @@ def test_write_logs_to_ddb(mock_iam_context, mock_sqs_context, mock_ddb_context,
     with patch('botocore.client.BaseClient._make_api_call', new=mock_boto3_api_call):
         write_logs_to_ddb(execution_name=param.execution_name, task_id=param.task_id, item=ddb_item, task_token=param.task_token)
         
+def test_execution_input_formatter():
+    from etl_helper.lambda_function import execution_input_formatter
     
+    metadata = {
+        'metadata': {
+            's3': {
+                'archivePath': 's3://staging-bucket/archive'
+                }, 
+            'athena': {
+                'statements': {
+                    'create': 'create table src{} {1, 3} location{} {2}{3};',
+                    'insert': 'insert into dest {1, a} select * {} {2} from src{} {3};',
+                    'drop': 'drop table {2}src{}{1}',
+                    'aggregate': ['insert into metrics {a, b}select * from dest where __execution_name__ = {}{b};']
+                }
+            }
+        }
+    }
+
+    assert execution_input_formatter(input=metadata, execution_name='0000') == {
+        'metadata': {
+            's3': {
+                'archivePath': 's3://staging-bucket/archive'
+                }, 
+            'athena': {
+                'statements': {
+                    'create': 'create table src0000 {1, 3} locations3://staging-bucket/archive/0000 {2}{3};', 
+                    'insert': 'insert into dest {1, a} select * 0000 {2} from src0000 {3};', 
+                    'drop': 'drop table {2}src0000{1}', 
+                    'aggregate': [
+                        'insert into metrics {a, b}select * from dest where __execution_name__ = 0000{b};'
+                        ]
+                    }
+                }
+            }
+        }
     

@@ -5,10 +5,11 @@ import os
 import json
 import uuid
 import copy
-from datetime import datetime
+import datetime
 from typing import Iterator
 from urllib.parse import unquote
-from utils import ValidateParameters, S3Client, AthenaClient, logger
+from utils.aws import S3Client, AthenaClient
+from utils.helpers import logger, ValidateParameters, iso8601_strftime
 from utils.models.etllog import ETLLogTable
 from utils.models.meta import MetaTable
 
@@ -61,16 +62,16 @@ class Parameters(ValidateParameters):
         self.action = parameters.get('action', 'ADD')
         if self.action not in ('ADD', 'DROP'):
             self.action = 'ADD'
-        self.extra = self._get_parameter_value(parameters.get('extra'), dict, {})
-        self.task_id = self._get_parameter_value(parameters.get('taskId'), str, str(uuid.uuid4()))
+        self.extra: dict = self._get_parameter_value(parameters.get('extra'), dict, {}) # type: ignore
+        self.task_id: str = self._get_parameter_value(parameters.get('taskId'), str, str(uuid.uuid4())) # type: ignore
         self.ddb_item = self.get_ddb_item()
     
     
     def get_ddb_item(self) -> dict:
         """Generate default item of ETLLogTable."""
         ddb_item = {'executionName': self.execution_name, 'functionName': self.function_name,
-                    'taskId': self.task_id, 'data': '', 'startTime': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.') + datetime.utcnow().strftime('%f')[:3] + 'Z',
-                    'endTime': '', 'status': 'Running', 'expirationTime': int(datetime.utcnow().timestamp() + AWS_DDB_META.etl_log_ttl_secs)}
+                    'taskId': self.task_id, 'data': '', 'startTime': iso8601_strftime(),
+                    'endTime': '', 'status': 'Running', 'expirationTime': int(datetime.datetime.now(datetime.UTC).timestamp() + AWS_DDB_META.etl_log_ttl_secs)}
         ddb_item.update(self.extra)
         ddb_item['pipelineIndexKey'] = ':'.join((ddb_item.get('pipelineId', ''), ddb_item.get('stateMachineName', ''), ddb_item['taskId']))
         return ddb_item
@@ -101,7 +102,7 @@ def lambda_handler(event, context) -> None:
     
     logger.info(f'Task execution status: {execution_status}')
     AWS_DDB_ETL_LOG.update(execution_name=param.execution_name, task_id=param.task_id, 
-                           item={'endTime': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.') + datetime.utcnow().strftime('%f')[:3] + 'Z', 'status': status})
+                           item={'endTime': iso8601_strftime(), 'status': status})
 
 
 def batch_update_partition_handler(param: Parameters) -> dict:

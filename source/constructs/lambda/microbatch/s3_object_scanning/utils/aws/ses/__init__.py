@@ -2,8 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import json
-from utils.aws.commonlib import AWSConnection
-from utils.logger import logger
+from utils.helpers import AWSConnection
 
 
 class SESClient:

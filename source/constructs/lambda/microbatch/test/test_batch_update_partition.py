@@ -8,7 +8,7 @@ import uuid
 import json
 import types
 import pytest
-from datetime import datetime
+import datetime
 from boto3.dynamodb.conditions import Attr
 from test.mock import mock_s3_context, mock_sqs_context, mock_iam_context, mock_ddb_context, mock_athena_context, default_environment_variables
 
@@ -70,7 +70,7 @@ class TestParameter:
         assert param.task_id == event['taskId']
         pipeline_index_key = param.ddb_item['pipelineIndexKey']
         param.ddb_item.pop('pipelineIndexKey')
-        assert param.ddb_item['expirationTime'] > datetime.utcnow().timestamp()
+        assert param.ddb_item['expirationTime'] > datetime.datetime.now(datetime.UTC).timestamp()
         param.ddb_item.pop('expirationTime')
         assert param.ddb_item == {'executionName': '848be54a-ae2c-414c-9ae3-f0b3d11089ab', 'functionName': 'ETLAlterAthenaPartition-WuQ7BUYqgA2L', 
                                   'taskId': event['taskId'], 'data': '', 
@@ -93,7 +93,7 @@ class TestParameter:
         assert param.task_id != ''
         pipeline_index_key = param.ddb_item['pipelineIndexKey']
         param.ddb_item.pop('pipelineIndexKey')
-        assert param.ddb_item['expirationTime'] > datetime.utcnow().timestamp()
+        assert param.ddb_item['expirationTime'] > datetime.datetime.now(datetime.UTC).timestamp()
         param.ddb_item.pop('expirationTime')
         assert param.ddb_item == {'executionName': '848be54a-ae2c-414c-9ae3-f0b3d11089ab', 'functionName': '', 'data': '', 
                                   'endTime': '', 'status': 'Running', 'stateMachineName': 'LogMerger-7vcYqNfMtsJK', 
@@ -116,7 +116,7 @@ class TestParameter:
         assert param.task_id != ''
         pipeline_index_key = param.ddb_item['pipelineIndexKey']
         param.ddb_item.pop('pipelineIndexKey')
-        assert param.ddb_item['expirationTime'] > datetime.utcnow().timestamp()
+        assert param.ddb_item['expirationTime'] > datetime.datetime.now(datetime.UTC).timestamp()
         param.ddb_item.pop('expirationTime')
         assert param.ddb_item == {'executionName': '848be54a-ae2c-414c-9ae3-f0b3d11089ab', 'functionName': '', 
                                   'data': '', 'endTime': '', 'status': 'Running'}

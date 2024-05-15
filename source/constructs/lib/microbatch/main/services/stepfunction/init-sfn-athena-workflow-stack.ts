@@ -116,8 +116,15 @@ export class InitSFNAthenaWorkflowStack extends Construct {
             "stateName.$": "$.extra.stateName",
           }
         }),
-        retryOnServiceExceptions: false,
         resultPath: sfn.JsonPath.DISCARD,
+      });
+
+      writeQueryExecutionStatusToDDB.addRetry({
+        interval: Duration.seconds(1),
+        maxAttempts: 5,
+        maxDelay: Duration.seconds(10),
+        backoffRate: 2,
+        jitterStrategy: sfn.JitterType.FULL,
       });
 
       const writeQueryExecutionFailedStatusToDDB = new tasks.LambdaInvoke(this, "Put Athena: StartQueryExecution failed logs to DynamoDB", {
@@ -138,8 +145,15 @@ export class InitSFNAthenaWorkflowStack extends Construct {
             "stateName.$": "$.extra.stateName",
           }
         }),
-        retryOnServiceExceptions: false,
         resultPath: sfn.JsonPath.DISCARD,
+      });
+
+      writeQueryExecutionFailedStatusToDDB.addRetry({
+        interval: Duration.seconds(1),
+        maxAttempts: 5,
+        maxDelay: Duration.seconds(10),
+        backoffRate: 2,
+        jitterStrategy: sfn.JitterType.FULL,
       });
 
       startQueryExecution.next(writeQueryExecutionStatusToDDB);

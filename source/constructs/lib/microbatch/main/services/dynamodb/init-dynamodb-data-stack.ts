@@ -63,7 +63,7 @@ export class InitDynamoDBDataStack extends Construct {
 
       const metadataWriterProvider = new cr.Provider(this, 'MetadataWriterProvider', {
         onEventHandler: microBatchLambdaStack.MetadataWriterStack.MetadataWriter,
-        providerFunctionName: `${Aws.STACK_NAME}-MetadataWriterProvider`,
+        providerFunctionName: `${Aws.STACK_NAME.substring(0, 30)}-MetadataWriterProvider`,
       });
 
       const metadata: any[] = [];

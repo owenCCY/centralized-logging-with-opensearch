@@ -16,8 +16,6 @@ limitations under the License.
 /* eslint-disable react/display-name */
 import React, { useState } from "react";
 import Swal from "sweetalert2";
-import SideMenu from "components/SideMenu";
-import Breadcrumb from "components/Breadcrumb";
 import InstanceGroupComp from "../../common/InstanceGroupComp";
 import Button from "components/Button";
 import { useNavigate } from "react-router-dom";
@@ -34,6 +32,8 @@ import { useTranslation } from "react-i18next";
 import { OptionType } from "components/AutoComplete/autoComplete";
 import { InstanceWithStatusType } from "pages/resources/common/InstanceTable";
 import UpdateSubAccountModal from "pages/comps/account/UpdateSubAccountModal";
+import CommonLayout from "pages/layout/CommonLayout";
+import { linkAccountMissingFields } from "assets/js/utils";
 
 export interface InstanceGroupType {
   groupName: string;
@@ -73,13 +73,11 @@ const CreateInstanceGroup: React.FC = () => {
     null
   );
   const [needUpdateSubAccount, setNeedUpdateSubAccount] = useState(false);
+  const [groupPlatform, setGroupPlatform] = useState(EC2GroupPlatform.Linux);
 
   const createLogInstanceGroupByEC2 = async () => {
     // check sub account has upload event sns
-    if (
-      curAccountId &&
-      !subAccountInfo?.subAccountFlbConfUploadingEventTopicArn
-    ) {
+    if (curAccountId && linkAccountMissingFields(subAccountInfo)) {
       setNeedUpdateSubAccount(true);
       return false;
     } else {
@@ -121,7 +119,7 @@ const CreateInstanceGroup: React.FC = () => {
       ec2: {
         groupName: curCreateInstanceGroup.groupName,
         groupType: EC2GroupType.EC2,
-        groupPlatform: EC2GroupPlatform.Linux,
+        groupPlatform: groupPlatform,
         instances: checkedInstanceList.map((instance) => ({
           instanceId: instance.id,
         })),
@@ -161,7 +159,7 @@ const CreateInstanceGroup: React.FC = () => {
         groupName: curCreateInstanceGroup.groupName,
         groupType: EC2GroupType.ASG,
         asgName: curCreateInstanceGroup.asgObj.value,
-        groupPlatform: EC2GroupPlatform.Linux,
+        groupPlatform: groupPlatform,
         instances: { instanceId: curCreateInstanceGroup.asgObj.value },
       },
     };
@@ -195,67 +193,63 @@ const CreateInstanceGroup: React.FC = () => {
   };
 
   return (
-    <div className="lh-main-content">
-      <SideMenu />
-      <div className="lh-container">
-        <div className="lh-content">
-          <div className="service-log">
-            <Breadcrumb list={breadCrumbList} />
-            <div>
-              <InstanceGroupComp
-                instanceGroup={curCreateInstanceGroup}
-                showNameEmptyError={createShowNameEmptyError}
-                accountId={curAccountId}
-                changeCurAccount={(id, account) => {
-                  setCurAccountId(id);
-                  setSubAccountInfo(account);
-                }}
-                setCreateDisabled={(disable) => {
-                  setCreateButtonDisabled(disable);
-                }}
-                changeGroupName={(name) => {
-                  setCreateShowNameEmptyError(false);
-                  setCurCreateInstanceGroup((prev) => {
-                    return { ...prev, groupName: name };
-                  });
-                }}
-                changeInstanceSet={(sets) => {
-                  setCheckedInstanceList(sets);
-                }}
-                changeASG={(asg) => {
-                  setCurCreateInstanceGroup((prev) => {
-                    return { ...prev, asgObj: asg };
-                  });
-                }}
-                changeGroupType={(type) => {
-                  setCurCreateInstanceGroup((prev) => {
-                    return { ...prev, groupType: type };
-                  });
-                }}
-              />
-            </div>
-            <div className="mt-20 button-action text-right">
-              <Button
-                btnType="text"
-                onClick={() => {
-                  navigate("/resources/instance-group");
-                }}
-              >
-                {t("button.cancel")}
-              </Button>
-              <Button
-                btnType="primary"
-                disabled={createButtonDisabled}
-                loading={loadingCreate}
-                onClick={() => {
-                  createLogInstanceGroup();
-                }}
-              >
-                {t("button.create")}
-              </Button>
-            </div>
-          </div>
-        </div>
+    <CommonLayout breadCrumbList={breadCrumbList}>
+      <div data-testid="test-create-instance-group">
+        <InstanceGroupComp
+          instanceGroup={curCreateInstanceGroup}
+          showNameEmptyError={createShowNameEmptyError}
+          accountId={curAccountId}
+          changeCurAccount={(id, account) => {
+            setCurAccountId(id);
+            setSubAccountInfo(account);
+          }}
+          setCreateDisabled={(disable) => {
+            setCreateButtonDisabled(disable);
+          }}
+          changeGroupName={(name) => {
+            setCreateShowNameEmptyError(false);
+            setCurCreateInstanceGroup((prev) => {
+              return { ...prev, groupName: name };
+            });
+          }}
+          changeInstanceSet={(sets) => {
+            setCheckedInstanceList(sets);
+          }}
+          changeASG={(asg) => {
+            setCurCreateInstanceGroup((prev) => {
+              return { ...prev, asgObj: asg };
+            });
+          }}
+          changeGroupType={(type) => {
+            setCurCreateInstanceGroup((prev) => {
+              return { ...prev, groupType: type };
+            });
+          }}
+          platform={groupPlatform}
+          changePlatform={(platform) => {
+            setGroupPlatform(platform);
+          }}
+        />
+      </div>
+      <div className="mt-20 button-action text-right">
+        <Button
+          btnType="text"
+          onClick={() => {
+            navigate("/resources/instance-group");
+          }}
+        >
+          {t("button.cancel")}
+        </Button>
+        <Button
+          btnType="primary"
+          disabled={createButtonDisabled}
+          loading={loadingCreate}
+          onClick={() => {
+            createLogInstanceGroup();
+          }}
+        >
+          {t("button.create")}
+        </Button>
       </div>
       <UpdateSubAccountModal
         accountInfo={subAccountInfo}
@@ -264,7 +258,7 @@ const CreateInstanceGroup: React.FC = () => {
           setNeedUpdateSubAccount(false);
         }}
       />
-    </div>
+    </CommonLayout>
   );
 };
 

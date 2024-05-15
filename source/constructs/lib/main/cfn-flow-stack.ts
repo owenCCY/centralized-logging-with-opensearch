@@ -94,6 +94,12 @@ export class CfnFlowStack extends Construct {
       statements: [
         new iam.PolicyStatement({
           actions: [
+            'sts:AssumeRole',
+          ],
+          resources: [`arn:${Aws.PARTITION}:iam::*:role/*CrossAccountRole*`]
+        }),
+        new iam.PolicyStatement({
+          actions: [
             'cloudformation:CreateUploadBucket',
             'cloudformation:DeleteStackInstances',
             'cloudformation:UpdateStackInstances',
@@ -176,7 +182,6 @@ export class CfnFlowStack extends Construct {
             'kms:PutKeyPolicy',
             'kms:DescribeKey',
             'kms:CreateKey',
-            'sts:AssumeRole',
             'kinesis:DescribeStreamSummary',
             'kinesis:PutRecord',
             'kinesis:PutRecords',
@@ -230,7 +235,9 @@ export class CfnFlowStack extends Construct {
             'lambda:GetFunctionConcurrency',
             'lambda:GetFunctionEventInvokeConfig',
             'lambda:GetCodeSigningConfig',
+            'lambda:GetAccountSettings',
             'lambda:GetPolicy',
+            'lambda:PutFunctionConcurrency',
             'ssm:GetParameters',
             'ssm:PutParameter',
             'ssm:AddTagsToResource',
@@ -265,6 +272,7 @@ export class CfnFlowStack extends Construct {
             'logs:PutMetricFilter',
             'logs:DeleteMetricFilter',
             'logs:DescribeMetricFilters',
+            'logs:TagResource',
             'autoscaling:CreateLaunchConfiguration',
             'autoscaling:CreateAutoScalingGroup',
             'autoscaling:DeleteAutoScalingGroup',
@@ -398,6 +406,7 @@ export class CfnFlowStack extends Construct {
             'iam:CreateRole',
             'iam:PutRolePolicy',
             'iam:PassRole',
+            'iam:TagRole',
             'iam:AttachRolePolicy',
             'iam:AddRoleToInstanceProfile',
             'iam:RemoveRoleFromInstanceProfile',
@@ -465,6 +474,7 @@ export class CfnFlowStack extends Construct {
       runtime: lambda.Runtime.PYTHON_3_11,
       handler: 'lambda_function.lambda_handler',
       timeout: Duration.seconds(30),
+      layers: [SharedPythonLayer.getInstance(this)],
       memorySize: 128,
       environment: {
         SOLUTION_VERSION: process.env.VERSION || 'v1.0.0',
@@ -569,6 +579,7 @@ export class CfnFlowStack extends Construct {
           'logs:DescribeResourcePolicies',
           'logs:GetLogDelivery',
           'logs:ListLogDeliveries',
+          'logs:TagResource'
         ],
         effect: iam.Effect.ALLOW,
         resources: [logGroup.logGroupArn],

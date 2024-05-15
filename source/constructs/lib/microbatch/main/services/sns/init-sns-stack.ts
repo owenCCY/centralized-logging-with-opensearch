@@ -35,7 +35,7 @@ export class InitSNSStack extends Construct {
       let microBatchKMSStack = props.microBatchKMSStack;
 
       this.SNSReceiveStatesFailedTopic = new sns.Topic(this,'ReceiveStatesFailedTopic', {
-        topicName: `${Aws.STACK_NAME}-ReceiveStatesFailedTopic`,
+        topicName: `${Aws.STACK_NAME.substring(0, 30)}-ReceiveStatesFailedTopic`,
         masterKey: microBatchKMSStack.encryptionKey,
       });
 
@@ -44,7 +44,7 @@ export class InitSNSStack extends Construct {
       cfnSNSReceiveStatesFailedTopic.overrideLogicalId("ReceiveStatesFailedTopic");
 
       this.SNSSendEmailTopic = new sns.Topic(this,'SendEmailTopic', {
-        topicName: `${Aws.STACK_NAME}-SendEmailTopic`,
+        topicName: `${Aws.STACK_NAME.substring(0, 30)}-SendEmailTopic`,
         masterKey: microBatchKMSStack.encryptionKey,
       });
 

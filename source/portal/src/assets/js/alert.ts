@@ -27,8 +27,10 @@ export const Alert = (
 };
 
 export const handleErrorMessage = (errorMessage: string) => {
+  if (!errorMessage || !refineErrorMessage(errorMessage)?.errorCode) {
+    return;
+  }
   const { errorCode, message } = refineErrorMessage(errorMessage);
-
   if (
     errorCode === ErrorCode.SVC_PIPELINE_NOT_CLEANED ||
     errorCode === ErrorCode.APP_PIPELINE_NOT_CLEANED

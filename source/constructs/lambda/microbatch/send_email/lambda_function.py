@@ -6,7 +6,8 @@ import re
 import json
 from typing import Union
 from prettytable import PrettyTable
-from utils import ValidateParameters, SNSClient, SESClient, logger
+from utils.aws import SNSClient, SESClient
+from utils.helpers import logger, ValidateParameters
 from utils.models.etllog import ETLLogTable
 from utils.models.meta import MetaTable
 

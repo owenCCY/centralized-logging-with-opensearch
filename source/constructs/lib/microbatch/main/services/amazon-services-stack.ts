@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { Construct } from "constructs";
-import { Aws } from "aws-cdk-lib";
+import { Aws, aws_ssm as ssm } from "aws-cdk-lib";
 import { InitDynamoDBStack } from "./dynamodb/init-dynamodb-stack";
 import { InitDynamoDBDataStack } from "./dynamodb/init-dynamodb-data-stack";
 import { InitSQSStack } from "./sqs/init-sqs-stack";
@@ -64,7 +64,7 @@ export class MicroBatchStack extends Construct {
       let stackPrefix = props.stackPrefix;
       let emailAddress = props.emailAddress;
       let SESState = props.SESState;
-      let SESEmailTemplate = `${Aws.STACK_NAME}-SESEmailTemplate`;
+      let SESEmailTemplate = `${Aws.STACK_NAME.substring(0, 30)}-SESEmailTemplate`;
 
       // !!! Do not modify the execution order !!!
 
@@ -176,5 +176,14 @@ export class MicroBatchStack extends Construct {
         microBatchGlueStack: this.microBatchGlueStack,
         microBatchSNSStack: this.microBatchSNSStack,
       });
+
+      const MicroBatchStackName = new ssm.StringParameter(this, 'MicroBatchStackName', {
+        parameterName: '/MicroBatch/StackName',
+        stringValue: `${Aws.STACK_NAME}`,
+      });
+  
+      // Override the logical ID
+      const cfnMicroBatchStackName = MicroBatchStackName.node.defaultChild as ssm.CfnParameter;
+      cfnMicroBatchStackName.overrideLogicalId("MicroBatchStackName");
     }
 }
